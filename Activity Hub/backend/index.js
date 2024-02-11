@@ -4,6 +4,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = require('./routes/router');
 const path = require('path')
+const mongoose = require ('mongoose')
+
+mongoose.connect('mongodb://127.0.0.1:27017/Events')
+  .then(() => console.log('Connected!'));
 
 const app = express()
 app.use(bodyParser.json())

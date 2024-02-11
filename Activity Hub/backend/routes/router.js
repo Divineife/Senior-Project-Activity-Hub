@@ -1,6 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
+const Event = require("../Models/Event")
+const path = require('path');
+const mongoose = require ('mongoose')
+
+router.use(express.static(path.join(__dirname, '../front-end/vite-project/src/Components')));
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,9 +19,30 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage})
 
-router.get("/", (req, res) => {
-    // res.render("home");
-    res.send("HOME")
+router.get("/events", async (req, res) => {
+    const events = await Event.find({})
+    res.send(events)
+})
+
+router.get("/events/:id", async (req, res) => {
+  
+})
+
+router.get("/makeEvent", async (req, res)=>{
+  const event = new Event({
+    event_id: new mongoose.Types.ObjectId(), // Generate unique ObjectId
+    event_name: "Fisk Watch Party",
+    event_desc: "Nigeria to Win AFCON"
+  });
+
+  const event2 = new Event({
+    event_id: new mongoose.Types.ObjectId(), // Generate unique ObjectId
+    event_name: "Vanderbilt Watch Party",
+    event_desc: "Nigeria to Win AFCON or Ivory Coast"
+  });
+  await event.save();
+  await event2.save();
+  res.send(event)
 })
 
 router.post('/upload', upload.single('file'), (req, res) => {
@@ -28,10 +54,4 @@ router.post('/upload', upload.single('file'), (req, res) => {
     // If a file is uploaded successfully, respond with a success message
     res.status(200).json({ message: 'File uploaded successfully' });
   });
-
-router.get('/users', (req,res) => {
-    const test = [ {"id" : 1, "name" : "test", "website": "test1.com"}, {"id" : 2, "name" : "test2", "website": "test2.com"}, {"id" : 3, "name" : "test3", "website": "test3.com"}]
-    res.send(test);
-})
-
 module.exports = router;

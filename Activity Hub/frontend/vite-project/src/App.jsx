@@ -1,8 +1,8 @@
 // import './App.css'
-import Contact  from './Test'
 import PostCard from './Components/PostCard'
 import PrimarySearchAppBar from './Components/NavBar'
 import EventUpload from './Components/EventUpload'
+import Events from './Components/Events'
 
 import {Route, Routes} from "react-router-dom"
 
@@ -13,7 +13,7 @@ function App() {
         <Route index element = {<PrimarySearchAppBar/>} />
       </Routes>
       <div>
-        <Contact/>
+        <Events/>
       </div>
 
     </>
