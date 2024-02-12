@@ -25,7 +25,9 @@ router.get("/events", async (req, res) => {
 })
 
 router.get("/events/:id", async (req, res) => {
-  
+  const id = req.params.id;
+  const event = await Event.findById(id)
+  res.send(event)
 })
 
 router.get("/makeEvent", async (req, res)=>{

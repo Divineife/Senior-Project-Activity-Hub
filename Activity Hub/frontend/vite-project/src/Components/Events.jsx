@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import Event from './Event';
 
 function Events() {
   const [events, setEvents] = useState([]);
@@ -13,14 +14,10 @@ function Events() {
 
   return (
     <div>
-    {console.log("Found", events)}
-      <h1>Events</h1>
       <ul>
         {events.map(event => (
-          <li key={event._id}>
-            <h2>{event.event_name}</h2>
-            <p>{event.event_desc}</p>
-          </li>
+          // eslint-disable-next-line react/jsx-key
+          <Event event = {event}/>
         ))}
       </ul>
     </div>

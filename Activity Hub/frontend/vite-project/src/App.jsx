@@ -1,21 +1,18 @@
-// import './App.css'
-import PostCard from './Components/PostCard'
-import PrimarySearchAppBar from './Components/NavBar'
-import EventUpload from './Components/EventUpload'
-import Events from './Components/Events'
+import './App.css'
+import NavBar from './Components/NavBar'
 
 import {Route, Routes} from "react-router-dom"
+import EventDetails from './Components/EventDetails'
+import Events from './Components/Events'
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route index element = {<PrimarySearchAppBar/>} />
-      </Routes>
-      <div>
-        <Events/>
-      </div>
-
+        <NavBar />
+        <Routes>
+          <Route index element={<Events />} />
+          <Route path="/eventDetails/:id" element={<EventDetails />} />
+        </Routes>
     </>
   )
 }
