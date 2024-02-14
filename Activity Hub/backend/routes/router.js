@@ -30,6 +30,10 @@ router.get("/events/:id", async (req, res) => {
   res.send(event)
 })
 
+router.get("/events/new", async(req, res)=>{
+  
+})
+
 router.get("/makeEvent", async (req, res)=>{
   const event = new Event({
     event_id: new mongoose.Types.ObjectId(), // Generate unique ObjectId

@@ -1,5 +1,9 @@
+/* eslint-disable react/jsx-key */
 import { useState, useEffect } from 'react';
 import Event from './Event';
+import "../Styles/Events.css"
+import { Grid } from '@mui/material';
+
 
 function Events() {
   const [events, setEvents] = useState([]);
@@ -13,14 +17,17 @@ function Events() {
   }, []);
 
   return (
-    <div>
-      <ul>
-        {events.map(event => (
-          // eslint-disable-next-line react/jsx-key
-          <Event event = {event}/>
+    <Grid container spacing={2}>
+      {/* <div className="event-list-container"> */}
+        {events.map((event, index) => (
+          <Grid item xs={4}>
+              <Event key={index} event={event} />
+          </Grid>
+          
         ))}
-      </ul>
-    </div>
+      {/* </div> */}
+    </Grid>
+    
   );
 }
 

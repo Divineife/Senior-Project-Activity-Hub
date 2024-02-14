@@ -15,6 +15,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
+import NewUserModal from './Modals/NewUserModal';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -57,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -154,6 +158,13 @@ export default function NavBar() {
     </Menu>
   );
 
+  // const navigate = useNavigate();
+  const addEvent = () => {
+    // navigate("events/new")
+    setOpen(true);
+  };
+  
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -184,6 +195,15 @@ export default function NavBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+            <Button
+              size="large"
+              aria-haspopup="true"
+              variant="contained"
+              onClick={() => addEvent()}
+            >
+              ADD Event
+            </Button>
+            <NewUserModal open={open} onClose={() => setOpen(false)}/>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -212,6 +232,7 @@ export default function NavBar() {
               <AccountCircle />
             </IconButton>
           </Box>
+          
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"

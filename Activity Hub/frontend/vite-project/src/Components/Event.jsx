@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { Paper } from '@mui/material';
 
 
 function Event(events) {
@@ -16,25 +17,25 @@ function Event(events) {
       };
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-        sx={{ height: 140 }}
-        image="/static/images/cards/contemplative-reptile.jpg"
-        title="green iguana"
-        />
-        <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-            {event.event_name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-            {event.event_desc}
-        </Typography>
-        </CardContent>
-        <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small" onClick={() => handleLearnMore(event._id)}>Learn More</Button>
-        </CardActions>
-    </Card>
+        <Paper elevation={15} sx={{ maxWidth: 345 }}>
+            <CardMedia
+            sx={{ height: 140 }}
+            image="/static/images/cards/contemplative-reptile.jpg"
+            title="green iguana"
+            />
+            <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+                {event.event_name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+                {event.event_desc}
+            </Typography>
+            </CardContent>
+            <CardActions>
+            <Button size="small">Share</Button>
+            <Button size="small" onClick={() => handleLearnMore(event._id)}>Learn More</Button>
+            </CardActions>
+        </Paper>
     );
 }
 
