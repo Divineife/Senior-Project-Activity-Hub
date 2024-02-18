@@ -1,5 +1,10 @@
+import { Container, Typography, Paper } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 function EventDetails() {
     const { id } = useParams();
@@ -38,13 +43,22 @@ function EventDetails() {
 
     return (
         <div>
-            <h1>Details Page</h1>
-            {eventDetails && (
-                <div>
-                    <h2>{eventDetails.event_name}</h2>
-                    <p>{eventDetails.event_desc}</p>
-                </div>
-            )}
+            <Container sx={{justifyContent: 'center', alignContent: 'center', display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+                <Typography gutterBottom variant="h4" component="div">
+                    Details Page
+                </Typography>
+                <Typography gutterBottom variant="h5" component="div">
+                    {eventDetails.eventName}
+                </Typography>
+                <Typography gutterBottom variant="h9" component="div">
+                    {eventDetails.eventDescription}
+                </Typography>
+                <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+                    <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+                    <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+                    <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+                </Paper>
+            </Container>
         </div>
     );
 }

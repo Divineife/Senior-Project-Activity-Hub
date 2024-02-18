@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,21 +18,24 @@ function Event(events) {
     return (
         <Paper elevation={15} sx={{ maxWidth: 345 }}>
             <CardMedia
-            sx={{ height: 140 }}
-            image="/static/images/cards/contemplative-reptile.jpg"
-            title="green iguana"
+            component= "img"
+            sx={{ height: 200 }}
+            image='https://upload.wikimedia.org/wikipedia/commons/e/e6/WTN_PeepHoles_022.JPG'
             />
-            <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-                {event.event_name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-                {event.event_desc}
-            </Typography>
+            <CardContent padding= {0}>
+                <Typography gutterBottom variant="h5" component="div">
+                    {event.eventName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {event.eventDescription}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {event.eventLocation}
+                </Typography>
             </CardContent>
             <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small" onClick={() => handleLearnMore(event._id)}>Learn More</Button>
+                <Button size="small">Share</Button>
+                <Button size="small" onClick={() => handleLearnMore(event._id)}>Learn More</Button>
             </CardActions>
         </Paper>
     );

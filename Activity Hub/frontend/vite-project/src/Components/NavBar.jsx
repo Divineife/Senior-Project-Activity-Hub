@@ -16,7 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import NewUserModal from './Modals/NewUserModal';
 
 const Search = styled('div')(({ theme }) => ({
@@ -158,10 +158,10 @@ export default function NavBar() {
     </Menu>
   );
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const addEvent = () => {
-    // navigate("events/new")
-    setOpen(true);
+    navigate("events/new")
+    // setOpen(true);
   };
   
 
@@ -181,10 +181,11 @@ export default function NavBar() {
           <Typography
             variant="h6"
             noWrap
-            component="div"
+            component={Link}
+            to="/"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            Activity
+            Activity Hub
           </Typography>
           <Search>
             <SearchIconWrapper>

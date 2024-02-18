@@ -2,7 +2,7 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import CommonButton from '../CommonButton/CommonButton';
+import EventForm from '../CommonButton/EventForm';
 import { modalStyles } from './styles';
 
 const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit }) => {
@@ -21,13 +21,13 @@ const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit }) => {
                 </Typography>
                 {content}
                 <Box sx={modalStyles.buttons}>
-                    <CommonButton
+                    <EventForm
                         variant="contained"
                         onClick={onSubmit}
                     >
                         Submit
-                    </CommonButton>
-                    <CommonButton onClick={onClose}>Cancel</CommonButton>
+                    </EventForm>
+                    <EventForm onClick={onClose}>Cancel</EventForm>
                 </Box>
             </Box>
         </Modal>

@@ -3,29 +3,28 @@ import { useState, useEffect } from 'react';
 import Event from './Event';
 import "../Styles/Events.css"
 import { Grid } from '@mui/material';
+import axios from 'axios';
 
 
 function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    // Fetch events data from the backend
-    fetch('http://localhost:3000/events')
-      .then(response => response.json())
-      .then(data => setEvents(data))
+    axios.get('http://localhost:3000/events')
+      .then(response => {
+        setEvents(response.data);
+      })
       .catch(error => console.error('Error fetching events:', error));
   }, []);
 
   return (
-    <Grid container spacing={2}>
-      {/* <div className="event-list-container"> */}
+    <Grid container spacing={2} className='event-list-container'>
         {events.map((event, index) => (
           <Grid item xs={4}>
               <Event key={index} event={event} />
           </Grid>
           
         ))}
-      {/* </div> */}
     </Grid>
     
   );
