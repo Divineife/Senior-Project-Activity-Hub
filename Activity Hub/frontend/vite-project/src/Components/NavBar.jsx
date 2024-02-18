@@ -18,6 +18,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { useNavigate, Link } from 'react-router-dom';
 import NewUserModal from './Modals/NewUserModal';
+import axios from 'axios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -82,6 +83,21 @@ export default function NavBar() {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      const url = `http://localhost:3000/events/${eventId}`;
+      const response = await axios.delete(url);
+
+      if (response.data.success) {
+        console.log('Event deleted successfully');
+      } else {
+        console.error('Error deleting event:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const menuId = 'primary-search-account-menu';
