@@ -65,6 +65,7 @@ def create_user(email, password, school, first_name, last_name):
         "first_name": first_name,
         "last_name": last_name
     }
+    print("USER IS", user)
 
     # Insert the user document into the database
     result = user_instance.insert_one(user)

@@ -44,14 +44,15 @@ def delete_event_route(event_id):
     else:
         return jsonify({'success': False, 'message': 'Event not found'}), 404
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signUp', methods=['POST'])
 def signup():
     data = request.json
     email = data.get('email')
     password = data.get('password')
     school = data.get('school')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
+    first_name = data.get('firstName')
+    last_name = data.get('lastName')
+    print("DATA IS ", data)
 
     # Check if the email already exists
     if get_user_by_email(email):
