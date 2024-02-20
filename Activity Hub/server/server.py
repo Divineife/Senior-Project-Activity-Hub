@@ -12,7 +12,6 @@ def home():
 @app.route('/events', methods=['GET'])
 def get_all_events_route():
     events = get_all_events()
-    print("EVENTS", events)
     for event in events:
         event['_id'] = str(event['_id'])
     return jsonify(events), 200
@@ -37,6 +36,8 @@ def get_event_route(event_id):
 
 @app.route('/events/<event_id>', methods=['DELETE'])
 def delete_event_route(event_id):
+    print("HERE")
+    print("ID GOTTEN IS", event_id)
     delete_result = delete_event(event_id)
 
     if delete_result.deleted_count == 1:
