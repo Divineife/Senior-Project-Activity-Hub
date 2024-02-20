@@ -30,7 +30,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignIn({setSignUp}) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,6 +39,9 @@ export default function SignIn() {
       password: data.get('password'),
     });
   };
+  const setChange = () => {
+    setSignUp();
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -98,9 +101,11 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2"> 
-                    {"Don't have an account? Sign Up"}
-                </Link>
+                <Button onClick={setChange}>
+                  <Link variant="body2"> 
+                      {"Don't have an account? Sign Up"}
+                  </Link>
+                </Button>
               </Grid>
             </Grid>
           </Box>

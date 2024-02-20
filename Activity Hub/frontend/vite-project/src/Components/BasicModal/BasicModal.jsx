@@ -2,13 +2,12 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import EventForm from '../CommonButton/EventForm';
 import { modalStyles } from './styles';
 import SignIn from '../SignIn';
 import SignUp from '../SignUp';
 
-const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit }) => {
-
+const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit, sessionState, setSignIn, setSignUp }) => {
+    console.log("Basic", sessionState)
     return (
         <Modal open={open} onClose={onClose} >
             <Box sx={modalStyles.wrapper}>
@@ -23,7 +22,8 @@ const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit }) => {
                 </Typography>
                 {content}
                 <Box sx={modalStyles.buttons}>
-                    <SignUp></SignUp>
+                    {sessionState == "signUp" && <SignUp setSignIn = {setSignIn} />}
+                    {sessionState == "signIn" && <SignIn setSignUp = {setSignUp} />}
                 </Box>
             </Box>
         </Modal>

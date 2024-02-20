@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -36,7 +35,7 @@ function Copyright(props) {
 // const defaultTheme = createTheme();
 
 
-export default function SignUp() {
+export default function SignUp({setSignIn}) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -68,6 +67,10 @@ const handleSubmit = async (event) => {
   const handleChange = (event) => {
     setSchool(event.target.value);
   };
+
+  const setChange = () => {
+    setSignIn();
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -167,9 +170,11 @@ const handleSubmit = async (event) => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/user/signIn" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <Button onClick={setChange}>
+                <Link variant="body2">
+                    Already have an account? Sign in
+                </Link>
+              </Button>
             </Grid>
           </Grid>
         </Box>

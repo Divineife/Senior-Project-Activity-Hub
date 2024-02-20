@@ -18,7 +18,7 @@ function App() {
           <Route path="/eventDetails/:id" element={<EventDetails />} />
           <Route path="/events/new" element={<EventForm />}></Route>
           <Route path="/user/signUp" element={<NewUserModal />}></Route>
-          <Route path="/user/signIn" element={<NewUserModal />}></Route>
+          <Route path="/user/signIn" element={<NewUserModal open = {true} />}></Route>
         </Routes>
       </Container>
     </div>

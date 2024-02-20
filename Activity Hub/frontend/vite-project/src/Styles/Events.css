@@ -2,7 +2,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between; /* Distributes items evenly with space between */
-    margin-bottom: 20px; /* Add margin between rows */
+    margin-bottom: 20px;
+     /* Add margin between rows */
     background-color:#deeff0;
     margin-top: 30px;
   }

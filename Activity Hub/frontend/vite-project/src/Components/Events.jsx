@@ -20,7 +20,7 @@ function Events() {
   return (
     <Grid container spacing={2} className='event-list-container'>
         {events.map((event, index) => (
-          <Grid item xs={4}>
+          <Grid item xs={4} sx={{marginBottom: 2 }}>
               <Event key={index} event={event} />
           </Grid>
           
