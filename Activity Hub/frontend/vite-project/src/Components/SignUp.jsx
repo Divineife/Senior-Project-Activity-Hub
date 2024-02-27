@@ -35,7 +35,7 @@ function Copyright(props) {
 // const defaultTheme = createTheme();
 
 
-export default function SignUp({setSignIn}) {
+export default function SignUp({setSignIn, setSignUpSuccess}) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -44,8 +44,8 @@ export default function SignUp({setSignIn}) {
   
     const navigate = useNavigate();
   
-const handleSubmit = async (event) => {
-  event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
             const response = await axios.post('http://localhost:3000/signUp', {
@@ -56,8 +56,9 @@ const handleSubmit = async (event) => {
             school,
             });
 
-            console.log(response.data);
-            navigate('/user/signIn'); // Redirect to sign-in page after successful sign-up
+            console.log("Login Success",response.data);
+            setSignUpSuccess(false);
+            navigate('/'); // Redirect to sign-in page after successful sign-up
         } catch (error) {
             console.error(error.response.data);
         }

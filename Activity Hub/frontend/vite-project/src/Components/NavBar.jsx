@@ -70,6 +70,7 @@ export default function NavBar() {
   const [open, setOpen] = React.useState(PageState.NEITHER);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [signUpSuccess, setSignUpSuccess] = useState(true);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -199,11 +200,14 @@ export default function NavBar() {
   };
   const setSignUp = () => {
     setOpen(PageState.SIGN_UP);
+    setSignUpSuccess(true);
   }
 
   const setSignIn = () => {
     setOpen(PageState.SIGN_IN);
+    setSignUpSuccess(true);
   };
+  console.log("NAVBAR", PageState.SIGN_IN, PageState.SIGN_UP, signUpSuccess)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -246,7 +250,7 @@ export default function NavBar() {
               {isDeleteButton ? 'Delete Event' : 'ADD Event'}
             </Button>
             
-            <NewUserModal open={open === PageState.SIGN_UP | open === PageState.SIGN_IN} onClose={() => setOpen(PageState.NEITHER)} sessionState = {open} setSignIn = {setSignIn} setSignUp = {setSignUp}/>
+            <NewUserModal open={open === PageState.SIGN_UP | open === PageState.SIGN_IN && signUpSuccess} onClose={() => setOpen(PageState.NEITHER)} sessionState = {open} setSignIn = {setSignIn} setSignUp = {setSignUp} setSignUpSuccess={setSignUpSuccess}/>
           <Box sx={{ flexGrow: 1 }} />
           <Button
               size="large"

@@ -13,7 +13,7 @@ load_dotenv(find_dotenv())
 password = os.environ.get("MONGODB_PWD")
 
 # MongoDB connection string
-connection_string = f"mongodb+srv://divvy:{password}@activityhub.zg8lxw8.mongodb.net/?retryWrites=true&w=majority/test"
+connection_string = f"mongodb+srv://divvy:{password}@activityhub.zg8lxw8.mongodb.net/?retryWrites=true&w=majority"
 
 
 
@@ -30,9 +30,14 @@ user = client.user
 user_instance = user.user_collections
 
 def get_all_events():
-    # Connect to the database and retrieve all events from the collection
-    events = list(event_instance.find())
-    return events
+    try:
+        # Connect to the database and retrieve all events from the collection
+        events = list(event_instance.find())
+        return events
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        raise
+
 
 # Define a function to create event documents in the database
 def create_event(data):

@@ -6,8 +6,8 @@ import { modalStyles } from './styles';
 import SignIn from '../SignIn';
 import SignUp from '../SignUp';
 
-const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit, sessionState, setSignIn, setSignUp }) => {
-    console.log("Basic", sessionState)
+const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit, sessionState, setSignIn, setSignUp, setSignUpSuccess}) => {
+    console.log("Basic", sessionState, open)
     return (
         <Modal open={open} onClose={onClose} >
             <Box sx={modalStyles.wrapper}>
@@ -22,8 +22,8 @@ const BasicModal = ({ open, onClose, title, subTitle, content, onSubmit, session
                 </Typography>
                 {content}
                 <Box sx={modalStyles.buttons}>
-                    {sessionState == "signUp" && <SignUp setSignIn = {setSignIn} />}
-                    {sessionState == "signIn" && <SignIn setSignUp = {setSignUp} />}
+                    {sessionState == "signUp" && <SignUp setSignIn = {setSignIn} setSignUpSuccess={setSignUpSuccess} />}
+                    {sessionState == "signIn" && <SignIn setSignUp = {setSignUp} setSignUpSuccess={setSignUpSuccess}/>}
                 </Box>
             </Box>
         </Modal>

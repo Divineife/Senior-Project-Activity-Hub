@@ -5,6 +5,8 @@ from db import *
 app = Flask(__name__)
 CORS(app, supports_credentials = True)
 
+secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = secret_key
 
 @app.route("/")
 def home():
@@ -52,7 +54,6 @@ def signup():
     school = data.get('school')
     first_name = data.get('firstName')
     last_name = data.get('lastName')
-    print("DATA IS ", data)
 
     # Check if the email already exists
     if get_user_by_email(email):
@@ -78,8 +79,7 @@ def login():
     if not check_password(user['password'], password):
         return jsonify(error='Invalid password'), 401
 
-    # Store the user's ID in the session
-    session['user_id'] = user['_id']
+    session['user_id'] = str(user['_id'])
 
     return jsonify(message='Logged in successfully'), 200
 
