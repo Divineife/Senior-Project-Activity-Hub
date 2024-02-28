@@ -35,6 +35,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn({setSignUp, setSignUpSuccess}) {
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ export default function SignIn({setSignUp, setSignUpSuccess}) {
         password,
       });
       // Handle successful signIn (e.g., redirect to a dashboard)
-      console.log(response.data);
+      console.log("Post Login", response.data, "END");
       setSignUpSuccess(false);
       navigate('/');
     } catch (error) {

@@ -1,25 +1,37 @@
-from flask import Flask, jsonify, request, session
-from flask_cors import CORS
+from flask import Flask, jsonify, request, session, redirect, url_for
+from flask_cors import CORS, cross_origin
 from db import *
+from flask_session import Session
+
 
 app = Flask(__name__)
-CORS(app, supports_credentials = True)
+
 
 secret_key = os.environ.get("SECRET_KEY")
 app.secret_key = secret_key
+
+app.config['SECRET_KEY'] = secret_key
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+
+Session(app)
+CORS(app, supports_credentials = True)
 
 @app.route("/")
 def home():
     return "<p>Hello, World!</p>"
 
 @app.route('/events', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_all_events_route():
+    print("SESHHHH", session, session.sid)
     events = get_all_events()
     for event in events:
         event['_id'] = str(event['_id'])
     return jsonify(events), 200
 
 @app.route('/addEvent', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def add_event():
     response = jsonify(message="Simple server is running")
     data = request.json
@@ -32,6 +44,7 @@ def add_event():
 def get_event_route(event_id):
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
+    
     if event:
         return jsonify(event), 200
     else:
@@ -64,6 +77,7 @@ def signup():
     return jsonify(message='User registered successfully'), 201
 
 @app.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def login():
     data = request.json
     # Your login logic here
@@ -80,7 +94,7 @@ def login():
         return jsonify(error='Invalid password'), 401
 
     session['user_id'] = str(user['_id'])
-
+    print("LOGIN", session, session.sid)
     return jsonify(message='Logged in successfully'), 200
 
 @app.route('/logout', methods=['POST'])

@@ -260,6 +260,7 @@ export default function NavBar() {
             >
               Sign Up
             </Button>
+          <Link to="/login" className="btn btn-success">Login</Link>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
