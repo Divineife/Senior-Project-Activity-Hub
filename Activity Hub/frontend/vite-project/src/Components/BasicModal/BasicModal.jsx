@@ -12,7 +12,6 @@ const BasicModal = ({
   title,
   subTitle,
   content,
-  onSubmit,
   sessionState,
   setSignIn,
   setSignUp,

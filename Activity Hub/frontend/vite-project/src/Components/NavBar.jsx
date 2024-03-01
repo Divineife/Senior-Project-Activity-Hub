@@ -126,7 +126,7 @@ export default function NavBar() {
         method: "POST",
         credentials: "include",
       });
-      console.log(response);
+      console.log("Logged out with", response.status);
     } catch (error) {
       console.log(error);
     }
@@ -289,7 +289,6 @@ export default function NavBar() {
             setUserInSession={setUserInSession}
           />
           <Box sx={{ flexGrow: 1 }} />
-          {console.log("USER SESSION", userInSession)}
           {userInSession ? (
             <Button
               size="large"
