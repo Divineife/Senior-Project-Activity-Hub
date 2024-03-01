@@ -71,6 +71,7 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
+  const [userInSession, setUserInSession] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -121,11 +122,20 @@ export default function NavBar() {
 
   const logout = async () => {
     try {
-      const response = axios.post("http://localhost:3000/logout");
+      const response = await fetch("http://localhost:3000/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       console.log(response);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setUserInSession(false);
+    navigate("/");
   };
 
   const menuId = "primary-search-account-menu";
@@ -216,10 +226,10 @@ export default function NavBar() {
     setSignUpSuccess(true);
   };
 
-  const [userInSession, setUserInSession] = useState(false);
-
   useEffect(() => {
-    fetch("http://localhost:3000/user_sess")
+    fetch("http://localhost:3000/user_sess", {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => setUserInSession(data.user_in_session));
   }, []);
@@ -255,14 +265,16 @@ export default function NavBar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Button
-            size="large"
-            aria-haspopup="true"
-            variant="contained"
-            onClick={isDeleteButton ? handleDeleteEvent : addEvent}
-          >
-            {isDeleteButton ? "Delete Event" : "ADD Event"}
-          </Button>
+          {userInSession && (
+            <Button
+              size="large"
+              aria-haspopup="true"
+              variant="contained"
+              onClick={isDeleteButton ? handleDeleteEvent : addEvent}
+            >
+              {isDeleteButton ? "Delete Event" : "ADD Event"}
+            </Button>
+          )}
 
           <NewUserModal
             open={
@@ -274,6 +286,7 @@ export default function NavBar() {
             setSignIn={setSignIn}
             setSignUp={setSignUp}
             setSignUpSuccess={setSignUpSuccess}
+            setUserInSession={setUserInSession}
           />
           <Box sx={{ flexGrow: 1 }} />
           {console.log("USER SESSION", userInSession)}
@@ -282,7 +295,7 @@ export default function NavBar() {
               size="large"
               aria-haspopup="true"
               variant="contained"
-              onClick={logout}
+              onClick={handleLogout}
             >
               Logout
             </Button>

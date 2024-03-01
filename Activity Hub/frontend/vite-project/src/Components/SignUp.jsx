@@ -38,7 +38,11 @@ function Copyright(props) {
 
 // const defaultTheme = createTheme();
 
-export default function SignUp({ setSignIn, setSignUpSuccess }) {
+export default function SignUp({
+  setSignIn,
+  setSignUpSuccess,
+  setUserInSession,
+}) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -59,9 +63,10 @@ export default function SignUp({ setSignIn, setSignUpSuccess }) {
         school,
       });
 
-      console.log("Login Success", response.data);
+      console.log("SignUP Success", response.data);
       setSignUpSuccess(false);
-      navigate("/"); // Redirect to sign-in page after successful sign-up
+      setUserInSession(true);
+      navigate("/");
     } catch (error) {
       console.error(error.response.data);
     }

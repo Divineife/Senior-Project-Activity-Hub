@@ -9,10 +9,17 @@ function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/events")
+    fetch("http://localhost:3000/events", {
+      credentials: "include",
+    })
       .then((response) => {
-        setEvents(response.data);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setEvents(data);
       })
       .catch((error) => console.error("Error fetching events:", error));
   }, []);

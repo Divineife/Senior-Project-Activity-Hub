@@ -37,7 +37,11 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn({ setSignUp, setSignUpSuccess }) {
+export default function SignIn({
+  setSignUp,
+  setSignUpSuccess,
+  setUserInSession,
+}) {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -55,6 +59,7 @@ export default function SignIn({ setSignUp, setSignUpSuccess }) {
       // Handle successful signIn (e.g., redirect to a dashboard)
       console.log("Post Login", response.data, "END");
       setSignUpSuccess(false);
+      setUserInSession(true);
       navigate("/");
     } catch (error) {
       // Handle error (e.g., display error message)

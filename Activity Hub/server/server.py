@@ -111,7 +111,7 @@ def login():
 
     session['user_id'] = str(user['_id'])
     print("LOGIN", session, session.sid)
-    return jsonify(message='Logged in successfully'), 200
+    return jsonify(message= session.get("user_id")), 200
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -120,7 +120,9 @@ def logout():
     return jsonify(message='Logged out successfully'), 200
 
 @app.route("/user_sess")
+@cross_origin(supports_credentials=True)
 def user():
+    print("Query", session)
     if session.get("user_id"):
         return jsonify({"user_in_session": True})
     else:

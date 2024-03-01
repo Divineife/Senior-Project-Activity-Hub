@@ -17,8 +17,8 @@ const BasicModal = ({
   setSignIn,
   setSignUp,
   setSignUpSuccess,
+  setUserInSession,
 }) => {
-  console.log("Basic", sessionState, open);
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={modalStyles.wrapper}>
@@ -29,10 +29,18 @@ const BasicModal = ({
         {content}
         <Box sx={modalStyles.buttons}>
           {sessionState == "signUp" && (
-            <SignUp setSignIn={setSignIn} setSignUpSuccess={setSignUpSuccess} />
+            <SignUp
+              setSignIn={setSignIn}
+              setSignUpSuccess={setSignUpSuccess}
+              setUserInSession={setUserInSession}
+            />
           )}
           {sessionState == "signIn" && (
-            <SignIn setSignUp={setSignUp} setSignUpSuccess={setSignUpSuccess} />
+            <SignIn
+              setSignUp={setSignUp}
+              setSignUpSuccess={setSignUpSuccess}
+              setUserInSession={setUserInSession}
+            />
           )}
         </Box>
       </Box>
