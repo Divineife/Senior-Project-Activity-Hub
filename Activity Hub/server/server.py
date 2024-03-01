@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
 from db import *
 from flask_session import Session
+import functools
+from flask_login import LoginManager, login_required
 
 
 app = Flask(__name__)
@@ -13,9 +15,21 @@ app.secret_key = secret_key
 app.config['SECRET_KEY'] = secret_key
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 Session(app)
 CORS(app, supports_credentials = True)
+
+@login_manager.user_loader
+def load_user(user_id):
+    print("PROTECTED", get_user_by_email(user_id))
+    return get_user_by_email(user_id)
 
 @app.route("/")
 def home():
@@ -41,6 +55,8 @@ def add_event():
 
 
 @app.route('/events/<event_id>', methods=['GET'])
+@cross_origin(supports_credentials=True)
+# @login_required
 def get_event_route(event_id):
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
@@ -103,6 +119,12 @@ def logout():
     session.pop('user_id', None)
     return jsonify(message='Logged out successfully'), 200
 
+@app.route("/user_sess")
+def user():
+    if session.get("user_id"):
+        return jsonify({"user_in_session": True})
+    else:
+        return jsonify({"user_in_session": False})
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=3000, debug=True)

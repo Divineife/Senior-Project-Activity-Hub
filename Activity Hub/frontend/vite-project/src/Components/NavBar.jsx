@@ -1,69 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import Button from '@mui/material/Button';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import NewUserModal from './Modals/NewUserModal';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import Badge from "@mui/material/Badge";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import Button from "@mui/material/Button";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import NewUserModal from "./Modals/NewUserModal";
+import axios from "axios";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: 'auto',
+    width: "auto",
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
+  color: "inherit",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
     },
   },
 }));
 
 const PageState = {
-  SIGN_UP: 'signUp',
-  SIGN_IN: 'signIn',
-  NEITHER: 'neither',
+  SIGN_UP: "signUp",
+  SIGN_IN: "signIn",
+  NEITHER: "neither",
 };
 
 export default function NavBar() {
@@ -78,13 +78,12 @@ export default function NavBar() {
   const location = useLocation();
 
   const [isDeleteButton, setIsDeleteButton] = useState(false);
-  const pattern = /((http:)?(\/\/)?([a-zA-Z0-9\.\:]+)?\/(eventDetails)\/([\w]+))/;
+  const pattern =
+    /((http:)?(\/\/)?([a-zA-Z0-9\.\:]+)?\/(eventDetails)\/([\w]+))/;
 
   useEffect(() => {
-    setIsDeleteButton(pattern.test(location.pathname))
-
+    setIsDeleteButton(pattern.test(location.pathname));
   }, [location.pathname, pattern]);
-
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -106,33 +105,42 @@ export default function NavBar() {
   const handleDeleteEvent = async () => {
     try {
       const eventId = location.pathname;
-      const found = eventId.match(pattern);
-      const url = "http://localhost:3000/events/" + found[6];
+      const id = eventId.match(pattern);
+      const url = "http://localhost:3000/events/" + id[6];
       const response = await axios.delete(url);
 
       if (response.data.success) {
-        console.log('Event deleted successfully');
+        console.log("Event deleted successfully");
       } else {
-        console.error('Error deleting event:', response.data.message);
+        console.error("Error deleting event:", response.data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
-  const menuId = 'primary-search-account-menu';
+  const logout = async () => {
+    try {
+      const response = axios.post("http://localhost:3000/logout");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
@@ -142,19 +150,19 @@ export default function NavBar() {
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
@@ -196,18 +204,25 @@ export default function NavBar() {
 
   const navigate = useNavigate();
   const addEvent = () => {
-    navigate("events/new")
+    navigate("events/new");
   };
   const setSignUp = () => {
     setOpen(PageState.SIGN_UP);
     setSignUpSuccess(true);
-  }
+  };
 
   const setSignIn = () => {
     setOpen(PageState.SIGN_IN);
     setSignUpSuccess(true);
   };
-  console.log("NAVBAR", PageState.SIGN_IN, PageState.SIGN_UP, signUpSuccess)
+
+  const [userInSession, setUserInSession] = useState(false);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/user_sess")
+      .then((response) => response.json())
+      .then((data) => setUserInSession(data.user_in_session));
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -227,10 +242,9 @@ export default function NavBar() {
             noWrap
             component={Link}
             to="/"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: "none", sm: "block" } }}
           >
             Activity Hub
-            
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -238,21 +252,42 @@ export default function NavBar() {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          <Button
+            size="large"
+            aria-haspopup="true"
+            variant="contained"
+            onClick={isDeleteButton ? handleDeleteEvent : addEvent}
+          >
+            {isDeleteButton ? "Delete Event" : "ADD Event"}
+          </Button>
+
+          <NewUserModal
+            open={
+              (open === PageState.SIGN_UP) | (open === PageState.SIGN_IN) &&
+              signUpSuccess
+            }
+            onClose={() => setOpen(PageState.NEITHER)}
+            sessionState={open}
+            setSignIn={setSignIn}
+            setSignUp={setSignUp}
+            setSignUpSuccess={setSignUpSuccess}
+          />
+          <Box sx={{ flexGrow: 1 }} />
+          {console.log("USER SESSION", userInSession)}
+          {userInSession ? (
             <Button
               size="large"
               aria-haspopup="true"
               variant="contained"
-              onClick={isDeleteButton ? handleDeleteEvent : addEvent}
+              onClick={logout}
             >
-              {isDeleteButton ? 'Delete Event' : 'ADD Event'}
+              Logout
             </Button>
-            
-            <NewUserModal open={open === PageState.SIGN_UP | open === PageState.SIGN_IN && signUpSuccess} onClose={() => setOpen(PageState.NEITHER)} sessionState = {open} setSignIn = {setSignIn} setSignUp = {setSignUp} setSignUpSuccess={setSignUpSuccess}/>
-          <Box sx={{ flexGrow: 1 }} />
-          <Button
+          ) : (
+            <Button
               size="large"
               aria-haspopup="true"
               variant="contained"
@@ -260,9 +295,14 @@ export default function NavBar() {
             >
               Sign Up
             </Button>
-          <Link to="/login" className="btn btn-success">Login</Link>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          )}
+
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -288,8 +328,8 @@ export default function NavBar() {
               <AccountCircle />
             </IconButton>
           </Box>
-          
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -306,6 +346,5 @@ export default function NavBar() {
       {renderMobileMenu}
       {renderMenu}
     </Box>
-    
   );
 }

@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
+import React, { useState, useEffect } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Tech Div
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -34,36 +38,34 @@ function Copyright(props) {
 
 // const defaultTheme = createTheme();
 
+export default function SignUp({ setSignIn, setSignUpSuccess }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [school, setSchool] = useState("");
 
-export default function SignUp({setSignIn, setSignUpSuccess}) {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [school, setSchool] = useState('');
-  
-    const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-            const response = await axios.post('http://localhost:3000/signUp', {
-            firstName,
-            lastName,
-            email,
-            password,
-            school,
-            });
+      const response = await axios.post("http://localhost:3000/signUp", {
+        firstName,
+        lastName,
+        email,
+        password,
+        school,
+      });
 
-            console.log("Login Success",response.data);
-            setSignUpSuccess(false);
-            navigate('/'); // Redirect to sign-in page after successful sign-up
-        } catch (error) {
-            console.error(error.response.data);
-        }
-    };
-
+      console.log("Login Success", response.data);
+      setSignUpSuccess(false);
+      navigate("/"); // Redirect to sign-in page after successful sign-up
+    } catch (error) {
+      console.error(error.response.data);
+    }
+  };
 
   const handleChange = (event) => {
     setSchool(event.target.value);
@@ -71,7 +73,7 @@ export default function SignUp({setSignIn, setSignUpSuccess}) {
 
   const setChange = () => {
     setSignIn();
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -79,18 +81,18 @@ export default function SignUp({setSignIn, setSignUpSuccess}) {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate  sx={{ mt: 3 }}>
+        <Box component="form" noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -172,9 +174,7 @@ export default function SignUp({setSignIn, setSignUpSuccess}) {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={setChange}>
-                <Link variant="body2">
-                    Already have an account? Sign in
-                </Link>
+                <Link variant="body2">Already have an account? Sign in</Link>
               </Button>
             </Grid>
           </Grid>
