@@ -14,7 +14,9 @@ function EventDetails() {
 
   useEffect(() => {
     // Make API call using fetch or Axios
-    fetch(`http://localhost:3000/events/${id}`)
+    fetch(`http://localhost:3000/events/${id}`, {
+      credentials: 'include',
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch event details");

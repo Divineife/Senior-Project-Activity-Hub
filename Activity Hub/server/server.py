@@ -3,11 +3,10 @@ from flask_cors import CORS, cross_origin
 from db import *
 from flask_session import Session
 import functools
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager
 
 
 app = Flask(__name__)
-
 
 secret_key = os.environ.get("SECRET_KEY")
 app.secret_key = secret_key
@@ -26,11 +25,6 @@ login_manager.init_app(app)
 Session(app)
 CORS(app, supports_credentials = True)
 
-@login_manager.user_loader
-def load_user(user_id):
-    print("PROTECTED", get_user_by_email(user_id))
-    return get_user_by_email(user_id)
-
 @app.route("/")
 def home():
     return "<p>Hello, World!</p>"
@@ -38,7 +32,7 @@ def home():
 @app.route('/events', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    print("SESHHHH", session, session.sid)
+    # print("SESHHHH", session, session.sid)
     events = get_all_events()
     for event in events:
         event['_id'] = str(event['_id'])
@@ -52,15 +46,11 @@ def add_event():
     inserted_id = create_event(data)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
 
-
-
 @app.route('/events/<event_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
-# @login_required
 def get_event_route(event_id):
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
-    
     if event:
         return jsonify(event), 200
     else:
@@ -110,7 +100,7 @@ def login():
         return jsonify(error='Invalid password'), 401
 
     session['user_id'] = str(user['_id'])
-    print("LOGIN", session, session.sid)
+    # print("LOGIN", session, session.sid)
     return jsonify(message= session.get("user_id")), 200
 
 @app.route('/logout', methods=['POST'])
@@ -122,11 +112,22 @@ def logout():
 @app.route("/user_sess")
 @cross_origin(supports_credentials=True)
 def user():
-    print("Query", session)
+    # print("Query", session)
     if session.get("user_id"):
         return jsonify({"user_in_session": True})
     else:
         return jsonify({"user_in_session": False})
+    
+@app.route("/user/validate")
+@cross_origin(supports_credentials=True)
+def validate():
+    if 'user_id' in session:
+        return "True"
+    return "False"
+
+def validate_owner(user_id):
+    val = get_id(user_id)
+    return val['_id'] == user_id
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=3000, debug=True)

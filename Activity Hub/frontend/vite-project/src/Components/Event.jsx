@@ -5,13 +5,29 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
+import { useEffect } from "react";
 
 function Event(events) {
   const { event } = events;
   const navigate = useNavigate();
 
   const handleLearnMore = (eventId) => {
-    navigate(`/eventDetails/${eventId}`);
+    try {
+      let val = fetch("http://localhost:3000/user/validate", {
+        credentials: "include"
+      }).then(res => {
+        return res.text();  // Extract the response body as text
+      }).then(result => {
+        console.log("Authorization", result);
+        if (result === "True") {
+          navigate(`/eventDetails/${eventId}`);
+        }
+      })
+      
+    } catch (e) {
+        console.log("Failed to validate", e)
+    }
+    
   };
 
   return (
