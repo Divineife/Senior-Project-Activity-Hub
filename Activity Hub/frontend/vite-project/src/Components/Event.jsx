@@ -35,7 +35,7 @@ function Event(events) {
       <CardMedia
         component="img"
         sx={{ height: 200 }}
-        image="https://upload.wikimedia.org/wikipedia/commons/e/e6/WTN_PeepHoles_022.JPG"
+        image={event.eventImage}
       />
       <CardContent padding={0}>
         <Typography gutterBottom variant="h5" component="div">
