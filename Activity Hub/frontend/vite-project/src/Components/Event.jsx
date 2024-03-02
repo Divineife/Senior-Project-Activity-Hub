@@ -14,20 +14,19 @@ function Event(events) {
   const handleLearnMore = (eventId) => {
     try {
       let val = fetch("http://localhost:3000/user/validate", {
-        credentials: "include"
-      }).then(res => {
-        return res.text();  // Extract the response body as text
-      }).then(result => {
-        console.log("Authorization", result);
-        if (result === "True") {
-          navigate(`/eventDetails/${eventId}`);
-        }
+        credentials: "include",
       })
-      
+        .then((res) => {
+          return res.text(); // Extract the response body as text
+        })
+        .then((result) => {
+          if (result === "True") {
+            navigate(`/eventDetails/${eventId}`);
+          }
+        });
     } catch (e) {
-        console.log("Failed to validate", e)
+      console.log("Failed to validate", e);
     }
-    
   };
 
   return (
