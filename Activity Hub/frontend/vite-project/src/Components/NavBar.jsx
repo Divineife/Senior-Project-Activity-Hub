@@ -112,6 +112,7 @@ export default function NavBar() {
 
       if (response.data.success) {
         console.log("Event deleted successfully");
+        navigate('/')
       } else {
         console.error("Error deleting event:", response.data.message);
       }

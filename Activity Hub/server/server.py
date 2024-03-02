@@ -41,9 +41,10 @@ def get_all_events_route():
 @app.route('/addEvent', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def add_event():
-    response = jsonify(message="Simple server is running")
     data = request.json
-    inserted_id = create_event(data)
+    id = session["user_id"]
+    data["author"] = id
+    inserted_id = create_event(data, id)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
 
 @app.route('/events/<event_id>', methods=['GET'])

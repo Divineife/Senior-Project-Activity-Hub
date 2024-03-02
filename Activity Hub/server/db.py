@@ -40,8 +40,15 @@ def get_all_events():
 
 
 # Define a function to create event documents in the database
-def create_event(data):
+def create_event(data, id):
     result = event_instance.insert_one(data)
+    
+    user = user_instance.find_one({"_id": ObjectId(id)})
+    if user:
+        user_instance.update_one(
+            {"_id": ObjectId(id)},
+            {"$push": {"events": result.inserted_id}}
+        )
     return result.inserted_id
 
 def get_event_by_id(event_id):
