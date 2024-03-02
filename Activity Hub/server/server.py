@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
 from db import *
+from imageUpload import *
 from flask_session import Session
 import functools
 from flask_login import LoginManager
@@ -41,9 +42,22 @@ def get_all_events_route():
 @app.route('/addEvent', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def add_event():
-    data = request.json
+    if 'eventImage' not in request.files:
+        return jsonify({'error': 'No file part'})
+    
     id = session["user_id"]
+    data = {}
+    data["eventName"] = request.form.get('eventName')
+    data["eventDescription"] = request.form.get('eventDescription')
+    data["eventLocation"] = request.form.get('eventLocation')
+    data["selectedVisibility"] = request.form.get('selectedVisibility')
     data["author"] = id
+
+    file = request.files['eventImage']
+    src = uploadImage(file)
+    
+    data["eventImage"] = src
+
     inserted_id = create_event(data, id)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
 

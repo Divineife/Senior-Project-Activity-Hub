@@ -9,14 +9,17 @@ import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import Visibility from "./Visibility";
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import { Form, useNavigate } from "react-router-dom";
+import LinearProgress from '@mui/material/LinearProgress';
 
 const EventForm = () => {
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [selectedVisibility, setSelectedVisibility] = useState(null);
+  const [eventImage, setEventImage] = useState(null);
+
   const navigate = useNavigate();
 
   const handleVisibilityChange = (newVisibility) => {
@@ -26,22 +29,19 @@ const EventForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
-      eventName,
-      eventDescription,
-      eventLocation,
-      selectedVisibility,
-    };
+    const formData = new FormData();
+    formData.append('eventName', eventName);
+    formData.append('eventDescription', eventDescription);
+    formData.append('eventLocation', eventLocation);
+    formData.append('selectedVisibility', selectedVisibility);
+    formData.append('eventImage', eventImage);
 
     try {
       const url = "http://localhost:3000/addEvent";
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: 'include'
+        body: formData,
+        credentials: 'include',
       });
 
       console.log(response.data);
@@ -79,10 +79,13 @@ const EventForm = () => {
               ></Input>
             </FormControl>
             <FormControl>
+              <TextField type="file"
+              onChange={ (e)=> setEventImage(e.target.files[0])} />
+            </FormControl>
+            <FormControl>
               <Visibility onVisibilityChange={handleVisibilityChange} />
             </FormControl>
           </Stack>
-
           <Button type="submit" variant="contained" onClick={handleSubmit}>
             ADD EVENT
           </Button>
