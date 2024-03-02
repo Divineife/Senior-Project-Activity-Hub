@@ -9,9 +9,9 @@ import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import Visibility from "./Visibility";
 import { useState } from "react";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import { Form, useNavigate } from "react-router-dom";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 
 const EventForm = () => {
   const [eventName, setEventName] = useState("");
@@ -30,18 +30,18 @@ const EventForm = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('eventName', eventName);
-    formData.append('eventDescription', eventDescription);
-    formData.append('eventLocation', eventLocation);
-    formData.append('selectedVisibility', selectedVisibility);
-    formData.append('eventImage', eventImage);
+    formData.append("eventName", eventName);
+    formData.append("eventDescription", eventDescription);
+    formData.append("eventLocation", eventLocation);
+    formData.append("selectedVisibility", selectedVisibility);
+    formData.append("eventImage", eventImage);
 
     try {
       const url = "http://localhost:3000/addEvent";
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         body: formData,
-        credentials: 'include',
+        credentials: "include",
       });
 
       console.log(response.data);
@@ -79,8 +79,10 @@ const EventForm = () => {
               ></Input>
             </FormControl>
             <FormControl>
-              <TextField type="file"
-              onChange={ (e)=> setEventImage(e.target.files[0])} />
+              <TextField
+                type="file"
+                onChange={(e) => setEventImage(e.target.files[0])}
+              />
             </FormControl>
             <FormControl>
               <Visibility onVisibilityChange={handleVisibilityChange} />

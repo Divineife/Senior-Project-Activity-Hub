@@ -55,13 +55,19 @@ export default function SignUp({
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/signUp", {
-        firstName,
-        lastName,
-        email,
-        password,
-        school,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/signUp",
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          school,
+        },
+        {
+          withCredentials: true,
+        },
+      );
 
       console.log("Sign Up Success", response.data);
       setSignUpSuccess(false);

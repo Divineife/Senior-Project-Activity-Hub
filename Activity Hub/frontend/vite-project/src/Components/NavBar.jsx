@@ -112,7 +112,7 @@ export default function NavBar() {
 
       if (response.data.success) {
         console.log("Event deleted successfully");
-        navigate('/')
+        navigate("/");
       } else {
         console.error("Error deleting event:", response.data.message);
       }
@@ -271,9 +271,9 @@ export default function NavBar() {
               size="large"
               aria-haspopup="true"
               variant="contained"
-              onClick={isDeleteButton ? handleDeleteEvent : addEvent}
+              onClick={addEvent}
             >
-              {isDeleteButton ? "Delete Event" : "ADD Event"}
+              {"ADD Event"}
             </Button>
           )}
 
