@@ -63,7 +63,7 @@ export default function SignUp({
         school,
       });
 
-      console.log("SignUP Success", response.data);
+      console.log("Sign Up Success", response.data);
       setSignUpSuccess(false);
       setUserInSession(true);
       navigate("/");

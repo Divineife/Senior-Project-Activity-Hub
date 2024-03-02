@@ -35,10 +35,13 @@ const EventForm = () => {
 
     try {
       const url = "http://localhost:3000/addEvent";
-      const response = await axios.post(url, data, {
+      const response = await fetch(url, {
+        method: 'POST',
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
+        credentials: 'include'
       });
 
       console.log(response.data);

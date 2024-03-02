@@ -57,7 +57,7 @@ export default function SignIn({
         password,
       });
       // Handle successful signIn (e.g., redirect to a dashboard)
-      console.log("Post Login", response.data, "END");
+      console.log("Login Success", response.status);
       setSignUpSuccess(false);
       setUserInSession(true);
       navigate("/");

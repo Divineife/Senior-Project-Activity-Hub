@@ -15,10 +15,6 @@ const NewUserModal = ({
     addNewEvent(data);
   };
 
-  const handleSubmit = (user) => {
-    console.log("Handled", user);
-  };
-
   return (
     <BasicModal
       open={open}
@@ -28,7 +24,6 @@ const NewUserModal = ({
       setSignUp={setSignUp}
       setSignUpSuccess={setSignUpSuccess}
       title="We are Excited to have you Join Our Hub"
-      onSubmit={handleSubmit(addUser)}
       setUserInSession={setUserInSession}
     />
   );
