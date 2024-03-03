@@ -3,7 +3,6 @@ from flask_cors import CORS, cross_origin
 from db import *
 from imageUpload import *
 from flask_session import Session
-import functools
 from flask_login import LoginManager
 
 
@@ -33,10 +32,12 @@ def home():
 @app.route('/events', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    # print("SESHHHH", session, session.sid)
+    print("SESHHHH", session)
     events = get_all_events()
+    print("GOTT", events)
     for event in events:
-        event['_id'] = str(event['_id'])
+        event['_id'] = str(event.get('_id'))
+        event['eventImgId'] = str(event.get('eventImgId'))
     return jsonify(events), 200
 
 @app.route('/addEvent', methods=['POST'])
@@ -54,18 +55,26 @@ def add_event():
     data["author"] = id
 
     file = request.files['eventImage']
-    src = uploadImage(file)
-    
-    data["eventImage"] = src
+    src = upload_img(file)
+    image_id = create_image(src)
+    data['eventImgId'] = image_id
 
     inserted_id = create_event(data, id)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
+
+@app.route('/image/<img_id>', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def get_event_img(img_id):
+    print("IMG", img_id)
+    img = get_img_by_id(img_id)
+    return jsonify({'result': img['url']})
 
 @app.route('/events/<event_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_event_route(event_id):
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
+    event['eventImgId'] = str(event.get('eventImgId'))
     if event:
         return jsonify(event), 200
     else:
@@ -73,12 +82,17 @@ def get_event_route(event_id):
 
 @app.route('/events/<event_id>', methods=['DELETE'])
 def delete_event_route(event_id):
-    delete_result = delete_event(event_id)
-
-    if delete_result.deleted_count == 1:
-        return jsonify({'success': True, 'message': 'Event deleted successfully'}), 200
-    else:
-        return jsonify({'success': False, 'message': 'Event not found'}), 404
+    img_id = request.args.get('imgId')
+    img_Obj = get_img_by_id(img_id)
+    try:
+        res = delete_img(img_Obj["public_id"])
+        delete_result = delete_event(event_id)
+        if delete_result.deleted_count == 1 and res['result'] == 'ok':
+            return jsonify({'success': True, 'message': 'Event deleted successfully'}), 200
+        else:
+            return jsonify({'success': False, 'message': 'Event not found'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 @app.route('/signUp', methods=['POST'])
 def signup():
@@ -88,6 +102,7 @@ def signup():
     school = data.get('school')
     first_name = data.get('firstName')
     last_name = data.get('lastName')
+    print("SessionINFO", session)
 
     # Check if the email already exists
     if get_user_by_email(email):
@@ -95,6 +110,7 @@ def signup():
 
     # Create a new user
     create_user(email, password, school, first_name, last_name)
+    session['user_id'] = email
     return jsonify(message='User registered successfully'), 201
 
 @app.route('/login', methods=['POST'])
@@ -139,6 +155,13 @@ def validate():
     if 'user_id' in session:
         return "True"
     return "False"
+
+@app.route("/validate/<author>", methods=['GET'])
+@cross_origin(supports_credentials=True)
+def check_author(author):
+    if author == session['user_id']:
+        return jsonify({'result': True})
+    return jsonify({'result': False})
 
 def validate_owner(user_id):
     val = get_id(user_id)

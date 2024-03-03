@@ -4,7 +4,6 @@ from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from flask_bcrypt import Bcrypt
 import os
-import pprint
 
 # Load environment variables
 load_dotenv(find_dotenv())
@@ -29,6 +28,9 @@ event_instance = event.event_collections
 user = client.user
 user_instance = user.user_collections
 
+image = client.image
+image_instance = image.image_collections
+
 def get_all_events():
     try:
         # Connect to the database and retrieve all events from the collection
@@ -38,6 +40,9 @@ def get_all_events():
         print(f"An error occurred: {e}")
         raise
 
+def create_image(data):
+    result = image_instance.insert_one(data)
+    return result.inserted_id
 
 # Define a function to create event documents in the database
 def create_event(data, id):
@@ -50,6 +55,10 @@ def create_event(data, id):
             {"$push": {"events": result.inserted_id}}
         )
     return result.inserted_id
+
+def get_img_by_id(img_id):
+    image = image_instance.find_one({'_id': ObjectId(img_id)})
+    return image
 
 def get_event_by_id(event_id):
     # Connect to the database and retrieve the event from the collection

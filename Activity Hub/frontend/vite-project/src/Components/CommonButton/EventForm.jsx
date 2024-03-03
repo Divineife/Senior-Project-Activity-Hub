@@ -10,8 +10,7 @@ import Paper from "@mui/material/Paper";
 import Visibility from "./Visibility";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Form, useNavigate } from "react-router-dom";
-import LinearProgress from "@mui/material/LinearProgress";
+import { useNavigate } from "react-router-dom";
 
 const EventForm = () => {
   const [eventName, setEventName] = useState("");
