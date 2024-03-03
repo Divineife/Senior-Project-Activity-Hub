@@ -44,6 +44,18 @@ def create_image(data):
     result = image_instance.insert_one(data)
     return result.inserted_id
 
+
+
+def get_img_by_id(img_id):
+    image = image_instance.find_one({'_id': ObjectId(img_id)})
+    return image
+
+def get_event_by_id(event_id):
+    # Connect to the database and retrieve the event from the collection
+    event = event_instance.find_one({'_id': ObjectId(event_id)})
+
+    return event
+
 # Define a function to create event documents in the database
 def create_event(data, id):
     result = event_instance.insert_one(data)
@@ -56,20 +68,17 @@ def create_event(data, id):
         )
     return result.inserted_id
 
-def get_img_by_id(img_id):
-    image = image_instance.find_one({'_id': ObjectId(img_id)})
-    return image
-
-def get_event_by_id(event_id):
-    # Connect to the database and retrieve the event from the collection
-    event = event_instance.find_one({'_id': ObjectId(event_id)})
-
-    return event
-
-def delete_event(event_id):
+def delete_event(event_id, img_id):
     # Connect to the database and delete the event from the collection
-    delete_result = event_instance.delete_one({'_id': ObjectId(event_id)})
-    return delete_result
+    try:
+        val = delete_img(img_id)
+        delete_result = event_instance.delete_one({'_id': ObjectId(event_id)})
+    finally:
+        return delete_result
+
+def delete_img(img_id):
+    delete_res = image_instance.delete_one({'_id': ObjectId(img_id)})
+    return delete_res
 
 def get_user_by_email(email):
     user = user_instance.find_one({"email": email})

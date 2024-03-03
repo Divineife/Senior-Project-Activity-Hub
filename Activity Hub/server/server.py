@@ -32,9 +32,8 @@ def home():
 @app.route('/events', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    print("SESHHHH", session)
+    # print("SESHHHH", session)
     events = get_all_events()
-    print("GOTT", events)
     for event in events:
         event['_id'] = str(event.get('_id'))
         event['eventImgId'] = str(event.get('eventImgId'))
@@ -65,7 +64,6 @@ def add_event():
 @app.route('/image/<img_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_event_img(img_id):
-    print("IMG", img_id)
     img = get_img_by_id(img_id)
     return jsonify({'result': img['url']})
 
@@ -82,11 +80,14 @@ def get_event_route(event_id):
 
 @app.route('/events/<event_id>', methods=['DELETE'])
 def delete_event_route(event_id):
-    img_id = request.args.get('imgId')
-    img_Obj = get_img_by_id(img_id)
+    img_id = request.args.get('imgId') 
     try:
+        img_Obj = get_img_by_id(img_id)
         res = delete_img(img_Obj["public_id"])
-        delete_result = delete_event(event_id)
+        delete_result = delete_event(event_id, img_id)
+        # img_del_res = delete_img(img_id)
+        print("DELETED", delete_result, img_id)
+
         if delete_result.deleted_count == 1 and res['result'] == 'ok':
             return jsonify({'success': True, 'message': 'Event deleted successfully'}), 200
         else:
@@ -102,7 +103,6 @@ def signup():
     school = data.get('school')
     first_name = data.get('firstName')
     last_name = data.get('lastName')
-    print("SessionINFO", session)
 
     # Check if the email already exists
     if get_user_by_email(email):
@@ -131,7 +131,6 @@ def login():
         return jsonify(error='Invalid password'), 401
 
     session['user_id'] = str(user['_id'])
-    # print("LOGIN", session, session.sid)
     return jsonify(message= session.get("user_id")), 200
 
 @app.route('/logout', methods=['POST'])
@@ -143,7 +142,6 @@ def logout():
 @app.route("/user_sess")
 @cross_origin(supports_credentials=True)
 def user():
-    # print("Query", session)
     if session.get("user_id"):
         return jsonify({"user_in_session": True})
     else:
