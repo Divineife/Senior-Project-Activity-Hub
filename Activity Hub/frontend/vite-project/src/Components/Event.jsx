@@ -5,11 +5,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Event(events) {
   const { event } = events;
   const navigate = useNavigate();
+  const [imgUrl, setImgUrl] = useState(false);
 
   const handleLearnMore = (eventId) => {
     try {
@@ -29,12 +31,24 @@ function Event(events) {
     }
   };
 
+  useEffect(() => {
+    fetch(`http://localhost:3000/image/` + event?.eventImgId, {
+      credentials: "include",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        setImgUrl(res.result);
+      });
+  }, []);
+
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
         sx={{ height: 200 }}
-        image={event.eventImage}
+        image={imgUrl ? imgUrl : event.eventImage}
       />
       <CardContent padding={0}>
         <Typography gutterBottom variant="h5" component="div">

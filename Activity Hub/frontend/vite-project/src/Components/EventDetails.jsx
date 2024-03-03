@@ -2,7 +2,6 @@ import { Container, Typography, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
@@ -60,8 +59,9 @@ function EventDetails() {
 
   const handleDeleteEvent = async () => {
     try {
+      {"ONDELETE", console.log(eventDetails)}
       const id = eventDetails._id;
-      const url = "http://localhost:3000/events/" + id;
+      const url = "http://localhost:3000/events/" + id + "?imgId=" + eventDetails.eventImgId;
       const response = await axios.delete(url);
 
       if (response.data.success) {

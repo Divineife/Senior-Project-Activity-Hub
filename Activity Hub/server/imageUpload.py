@@ -19,7 +19,11 @@ cloudinary.config(
 import cloudinary.uploader
 import cloudinary.api
 
-def uploadImage(file):
-    # print(cloud_name, api_key, api_secret)
+def upload_img(file):
     res = cloudinary.uploader.upload(file, unique_filename = False, overwrite=True)
-    return res['url']
+    del(res['api_key'])
+    return res
+
+def delete_img(pid):
+    res = cloudinary.uploader.destroy(pid)
+    return res
