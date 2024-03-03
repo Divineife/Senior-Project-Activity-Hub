@@ -59,9 +59,15 @@ function EventDetails() {
 
   const handleDeleteEvent = async () => {
     try {
-      {"ONDELETE", console.log(eventDetails)}
+      {
+        "ONDELETE", console.log(eventDetails);
+      }
       const id = eventDetails._id;
-      const url = "http://localhost:3000/events/" + id + "?imgId=" + eventDetails.eventImgId;
+      const url =
+        "http://localhost:3000/events/" +
+        id +
+        "?imgId=" +
+        eventDetails.eventImgId;
       const response = await axios.delete(url);
 
       if (response.data.success) {
