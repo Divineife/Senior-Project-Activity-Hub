@@ -9,7 +9,6 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
@@ -240,23 +239,15 @@ export default function NavBar() {
       <AppBar position="static">
         <Toolbar>
           <IconButton
-            size="large"
+            component="a"
+            href="/"
+            size="medium"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{ display: { xs: "none", sm: "block" } }}
           >
             Activity Hub
-          </Typography>
+          </IconButton>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

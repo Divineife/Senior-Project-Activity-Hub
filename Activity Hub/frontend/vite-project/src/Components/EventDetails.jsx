@@ -122,13 +122,13 @@ function EventDetails() {
           </Typography>
           <Paper
             sx={{
-            display: "flex",
-            justifyContent: "center",
-            position: "fixed",
-            bottom: 0,
-            left: 20,
-            right: 20,
-          }}
+              display: "flex",
+              justifyContent: "center",
+              position: "fixed",
+              bottom: 0,
+              left: 20,
+              right: 20,
+            }}
             elevation={3}
           >
             {isOwner && (
