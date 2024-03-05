@@ -6,6 +6,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 function EventDetails() {
   const { id } = useParams();
@@ -13,6 +17,7 @@ function EventDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [imgUrl, setImgUrl] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +33,8 @@ function EventDetails() {
       .then((data) => {
         // Set event details in state
         setEventDetails(data);
+      })
+      .then(() => {
         setLoading(false);
       })
       .catch((error) => {
@@ -38,15 +45,34 @@ function EventDetails() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/validate/` + eventDetails?.author, {
-      credentials: "include",
-    })
-      .then((response) => {
-        return response.json();
+    if (eventDetails) {
+      fetch(`http://localhost:3000/validate/` + eventDetails.author, {
+        credentials: "include",
       })
-      .then((res) => {
-        setIsOwner(res.result);
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((res) => {
+          setIsOwner(res.result);
+        });
+    }
+  }, [eventDetails]);
+
+  useEffect(() => {
+    if (eventDetails) {
+      fetch(`http://localhost:3000/image/` + eventDetails.eventImgId, {
+        credentials: "include",
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((res) => {
+          setImgUrl(res.result);
+        })
+        .catch((error) => {
+          console.log("Error on Image Load", error);
+        });
+    }
   }, [eventDetails]);
 
   if (loading) {
@@ -83,47 +109,48 @@ function EventDetails() {
 
   return (
     <div>
-      <Container
-        sx={{
-          justifyContent: "center",
-          alignContent: "center",
-          display: "flex",
-          flexDirection: "column",
-          textAlign: "center",
-        }}
-      >
-        <Typography gutterBottom variant="h4" component="div">
-          Details Page
-        </Typography>
-        <Typography gutterBottom variant="h5" component="div">
-          {eventDetails.eventName}
-        </Typography>
-        <Typography gutterBottom variant="h9" component="div">
-          {eventDetails.eventDescription}
-        </Typography>
-        <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-          elevation={3}
-        >
-          {isOwner && (
-            <Button
-              size="large"
-              aria-haspopup="true"
-              variant="contained"
-              onClick={handleDeleteEvent}
-            >
-              {"Delete Event"}
-            </Button>
-          )}
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
-          {isOwner && (
-            <Button size="large" aria-haspopup="true" variant="contained">
-              {"Edit Event"}
-            </Button>
-          )}
-        </Paper>
-      </Container>
+      <Card>
+        <Stack direction="column" spacing={1}>
+          <Chip label="Details Page" color="primary" />
+
+          <CardMedia component="img" sx={{ height: 200 }} image={imgUrl} />
+          <Typography gutterBottom variant="h5" component="div">
+            {eventDetails.eventName}
+          </Typography>
+          <Typography gutterBottom variant="h9" component="div">
+            {eventDetails.eventDescription}
+          </Typography>
+          <Paper
+            sx={{
+            display: "flex",
+            justifyContent: "center",
+            position: "fixed",
+            bottom: 0,
+            left: 20,
+            right: 20,
+          }}
+            elevation={3}
+          >
+            {isOwner && (
+              <Button
+                size="large"
+                aria-haspopup="true"
+                variant="contained"
+                onClick={handleDeleteEvent}
+              >
+                {"Delete Event"}
+              </Button>
+            )}
+            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+            <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+            {isOwner && (
+              <Button size="large" aria-haspopup="true" variant="contained">
+                {"Edit Event"}
+              </Button>
+            )}
+          </Paper>
+        </Stack>
+      </Card>
     </div>
   );
 }
