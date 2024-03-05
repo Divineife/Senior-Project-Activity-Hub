@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
 from db import *
-from imageUpload import *
+from img_upload import *
+from event_utils import EventUtils
 from flask_session import Session
 from flask_login import LoginManager
-
 
 app = Flask(__name__)
 
@@ -22,6 +22,7 @@ app.config['SESSION_USE_SIGNER'] = True
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+event_utils = EventUtils()
 Session(app)
 CORS(app, supports_credentials = True)
 
@@ -34,10 +35,17 @@ def home():
 def get_all_events_route():
     # print("SESHHHH", session)
     events = get_all_events()
-    for event in events:
-        event['_id'] = str(event.get('_id'))
-        event['eventImgId'] = str(event.get('eventImgId'))
-    return jsonify(events), 200
+    if session.get('user_id'):
+        user = get_user_by_id(session['user_id'])
+        user_events = event_utils.filter_events(events, user)
+
+    else:
+        for event in events:
+            event['eventImgId'] = str(event.get('eventImgId'))
+            event['_id'] = str(event.get('_id'))
+        user_events = events
+        
+    return jsonify(user_events), 200
 
 @app.route('/addEvent', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -85,7 +93,6 @@ def delete_event_route(event_id):
         img_Obj = get_img_by_id(img_id)
         res = delete_img(img_Obj["public_id"])
         delete_result = delete_event(event_id, img_id)
-        # img_del_res = delete_img(img_id)
         print("DELETED", delete_result, img_id)
 
         if delete_result.deleted_count == 1 and res['result'] == 'ok':
@@ -109,9 +116,13 @@ def signup():
         return jsonify(error='Email already exists'), 409
 
     # Create a new user
-    create_user(email, password, school, first_name, last_name)
-    session['user_id'] = email
-    return jsonify(message='User registered successfully'), 201
+    user_id = create_user(email, password, school, first_name, last_name)
+    # Check if user creation was successful
+    if user_id:
+        session['user_id'] = user_id
+        return jsonify(message='User registered successfully'), 201
+    else:
+        return jsonify(error='Failed to create user'), 500
 
 @app.route('/login', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -162,8 +173,8 @@ def check_author(author):
     return jsonify({'result': False})
 
 def validate_owner(user_id):
-    val = get_id(user_id)
-    return val['_id'] == user_id
+    res = get_user_by_id(user_id)
+    return res['_id'] == user_id
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=3000, debug=True)

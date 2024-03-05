@@ -102,6 +102,6 @@ def create_user(email, password, school, first_name, last_name):
 def check_password(hashed_password, password):
     return bcrypt.check_password_hash(hashed_password, password)
 
-def get_id(user_id):
+def get_user_by_id(user_id):
     res = user_instance.find_one({"_id": ObjectId(user_id)})
     return res
