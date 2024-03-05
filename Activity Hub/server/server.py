@@ -44,7 +44,7 @@ def get_all_events_route():
             event['eventImgId'] = str(event.get('eventImgId'))
             event['_id'] = str(event.get('_id'))
         user_events = events
-        
+
     return jsonify(user_events), 200
 
 @app.route('/addEvent', methods=['POST'])
@@ -78,6 +78,7 @@ def get_event_img(img_id):
 @app.route('/events/<event_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_event_route(event_id):
+    
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
     event['eventImgId'] = str(event.get('eventImgId'))
@@ -93,7 +94,6 @@ def delete_event_route(event_id):
         img_Obj = get_img_by_id(img_id)
         res = delete_img(img_Obj["public_id"])
         delete_result = delete_event(event_id, img_id)
-        print("DELETED", delete_result, img_id)
 
         if delete_result.deleted_count == 1 and res['result'] == 'ok':
             return jsonify({'success': True, 'message': 'Event deleted successfully'}), 200

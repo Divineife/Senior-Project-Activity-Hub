@@ -43,8 +43,6 @@ function Event(events) {
       });
   }, []);
 
-  {console.log("DATA INFO", event)}
-
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
       <CardMedia

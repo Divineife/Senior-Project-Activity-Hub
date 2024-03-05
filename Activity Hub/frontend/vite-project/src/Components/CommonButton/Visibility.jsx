@@ -55,6 +55,7 @@ export default function Visibility({ onVisibilityChange }) {
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-chip-label">Visibility</InputLabel>
         <Tooltip
+          placement="right"
           title={text}
           TransitionComponent={Fade}
           TransitionProps={{ timeout: 1 }}
