@@ -10,6 +10,7 @@ const NewUserModal = ({
   setSignUp,
   setSignUpSuccess,
   setUserInSession,
+  setUserInfo,
 }) => {
   const addUser = (data) => {
     addNewEvent(data);
@@ -25,6 +26,7 @@ const NewUserModal = ({
       setSignUpSuccess={setSignUpSuccess}
       title="We are Excited to have you Join Our Hub"
       setUserInSession={setUserInSession}
+      setUserInfo={setUserInfo}
     />
   );
 };

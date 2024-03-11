@@ -108,50 +108,61 @@ function EventDetails() {
   };
 
   return (
-    <div>
-      <Card>
-        <Stack direction="column" spacing={1}>
-          <Chip label="Details Page" color="primary" />
-
-          <CardMedia component="img" sx={{ height: 200 }} image={imgUrl} />
-          <Typography gutterBottom variant="h5" component="div">
-            {eventDetails.eventName}
-          </Typography>
-          <Typography gutterBottom variant="h9" component="div">
-            {eventDetails.eventDescription}
-          </Typography>
-          <Paper
-            sx={{
+    <Card
+      sx={{
+        border: "none",
+        padding: 1,
+        marginRight: 2,
+        backgroundColor: "#edf3f9",
+      }}
+    >
+      <Stack direction="column" spacing={2}>
+        <Chip
+          sx={{ borderRadius: 0, backgroundColor: "#edf3f9", fontSize: 20 }}
+          label="Details Page"
+        />
+        <CardMedia
+          component="img"
+          sx={{ height: 200 }}
+          image={imgUrl ? imgUrl : null}
+        />
+        <Typography gutterBottom variant="h5" component="div">
+          {eventDetails.eventName}
+        </Typography>
+        <Typography gutterBottom variant="h9" component="div">
+          {eventDetails.eventDescription}
+        </Typography>
+        <Paper
+          sx={{
             display: "flex",
             justifyContent: "center",
             position: "fixed",
             bottom: 0,
-            left: 20,
-            right: 20,
+            left: 0,
+            right: 0,
           }}
-            elevation={3}
-          >
-            {isOwner && (
-              <Button
-                size="large"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleDeleteEvent}
-              >
-                {"Delete Event"}
-              </Button>
-            )}
-            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-            <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
-            {isOwner && (
-              <Button size="large" aria-haspopup="true" variant="contained">
-                {"Edit Event"}
-              </Button>
-            )}
-          </Paper>
-        </Stack>
-      </Card>
-    </div>
+          elevation={3}
+        >
+          {isOwner && (
+            <Button
+              size="large"
+              aria-haspopup="true"
+              variant="contained"
+              onClick={handleDeleteEvent}
+            >
+              {"Delete Event"}
+            </Button>
+          )}
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+          {isOwner && (
+            <Button size="large" aria-haspopup="true" variant="contained">
+              {"Edit Event"}
+            </Button>
+          )}
+        </Paper>
+      </Stack>
+    </Card>
   );
 }
 

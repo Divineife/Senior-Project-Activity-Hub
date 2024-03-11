@@ -4,12 +4,10 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
@@ -18,7 +16,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import NewUserModal from "./Modals/NewUserModal";
-import axios from "axios";
+import UserAvatar from "./userAvatar";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,6 +70,7 @@ export default function NavBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
   const [userInSession, setUserInSession] = useState(false);
+  const [userName, setUserName] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -103,24 +102,6 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleDeleteEvent = async () => {
-    try {
-      const eventId = location.pathname;
-      const id = eventId.match(pattern);
-      const url = "http://localhost:3000/events/" + id[6];
-      const response = await axios.delete(url);
-
-      if (response.data.success) {
-        console.log("Event deleted successfully");
-        navigate("/");
-      } else {
-        console.error("Error deleting event:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   const logout = async () => {
     try {
       const response = await fetch("http://localhost:3000/logout", {
@@ -136,11 +117,12 @@ export default function NavBar() {
   const handleLogout = async () => {
     await logout();
     setUserInSession(false);
+    setUserName(null);
     navigate("/");
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  const renderMenu = () => (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
@@ -162,7 +144,7 @@ export default function NavBar() {
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
+  const renderMobileMenu = () => (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
@@ -206,7 +188,7 @@ export default function NavBar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <UserAvatar user={userName} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -227,36 +209,47 @@ export default function NavBar() {
     setSignUpSuccess(true);
   };
 
+  const setUserInfo = (userData) => {
+    setUserName(userData);
+    localStorage.setItem("userData", JSON.stringify(userData));
+  };
+
   useEffect(() => {
     fetch("http://localhost:3000/user_sess", {
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => setUserInSession(data.user_in_session));
+      .then((data) => {
+        setUserInSession(data.user_in_session);
+      });
   }, []);
 
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      setUserName(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  console.log(userName, userInSession);
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box
+      sx={{ flexGrow: 1 }}
+      style={{ paddingLeft: "0px", paddingRight: "0px" }}
+    >
+      <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
-            size="large"
+            component="a"
+            href="/"
+            size="medium"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{ display: { xs: "none", sm: "block" } }}
           >
             Activity Hub
-          </Typography>
+          </IconButton>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -268,10 +261,11 @@ export default function NavBar() {
           </Search>
           {userInSession && (
             <Button
-              size="large"
+              size="small"
               aria-haspopup="true"
               variant="contained"
               onClick={addEvent}
+              style={{ marginRight: "15px", margin: "10px 15px 10px 0px" }}
             >
               {"ADD Event"}
             </Button>
@@ -288,11 +282,12 @@ export default function NavBar() {
             setSignUp={setSignUp}
             setSignUpSuccess={setSignUpSuccess}
             setUserInSession={setUserInSession}
+            setUserInfo={setUserInfo}
           />
           <Box sx={{ flexGrow: 1 }} />
           {userInSession ? (
             <Button
-              size="large"
+              size="small"
               aria-haspopup="true"
               variant="contained"
               onClick={handleLogout}
@@ -310,37 +305,39 @@ export default function NavBar() {
             </Button>
           )}
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
+          {userInSession && (
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <UserAvatar user={userName} />
+              </IconButton>
+            </Box>
+          )}
 
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -356,8 +353,9 @@ export default function NavBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+
+      {userInSession && renderMobileMenu()}
+      {userInSession && renderMenu()}
     </Box>
   );
 }

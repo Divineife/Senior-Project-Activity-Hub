@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import EventDetails from "./Components/EventDetails";
 import Events from "./Components/Events";
 import EventForm from "./Components/CommonButton/EventForm";
-import { Container } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import NewUserModal from "./Components/Modals/NewUserModal";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     <>
       <div>
         <NavBar />
-        <Container sx={{ marginTop: 5 }}>
+        <Grid sx={{ padding: 5, paddingRight: 2 }}>
           <Routes>
             <Route index element={<Events />} />
             <Route path="/eventDetails/:id" element={<EventDetails />} />
@@ -23,7 +23,7 @@ function App() {
               element={<NewUserModal open={true} />}
             ></Route>
           </Routes>
-        </Container>
+        </Grid>
       </div>
     </>
   );

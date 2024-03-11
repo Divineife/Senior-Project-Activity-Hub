@@ -6,12 +6,14 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import Fab from "@mui/material/Fab";
 
 function Event(events) {
   const { event } = events;
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
+  const [interestCount, setInterestCount] = useState(10);
+  const [hasIndicatedInterest, setHasIndicatedInterest] = useState(false);
 
   const handleLearnMore = (eventId) => {
     try {
@@ -43,6 +45,16 @@ function Event(events) {
       });
   }, []);
 
+  const handleInterestClick = () => {
+    if (!hasIndicatedInterest) {
+      setInterestCount(interestCount + 1);
+      setHasIndicatedInterest(true);
+    } else {
+      setInterestCount(interestCount - 1);
+      setHasIndicatedInterest(false);
+    }
+  };
+
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -60,12 +72,32 @@ function Event(events) {
         <Typography variant="body2" color="text.secondary">
           {event.eventLocation}
         </Typography>
+        <Typography variant="body2" style={{ marginRight: "10px" }}>
+          {interestCount} Going
+        </Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Share</Button>
         <Button size="small" onClick={() => handleLearnMore(event._id)}>
           Learn More
         </Button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "8px",
+          }}
+        >
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            onClick={handleInterestClick}
+          >
+            {/* <NavigationIcon sx={{ mr: 0 }} /> */}
+            RSVP
+          </Fab>
+        </div>
       </CardActions>
     </Paper>
   );
