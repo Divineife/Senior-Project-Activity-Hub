@@ -16,7 +16,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import NewUserModal from "./Modals/NewUserModal";
-import axios from "axios";
+import UserAvatar from "./userAvatar";
+import { Avatar } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -70,7 +71,7 @@ export default function NavBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
   const [userInSession, setUserInSession] = useState(false);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState(1);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -187,7 +188,7 @@ export default function NavBar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <UserAvatar user = {userName}/>
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -209,18 +210,28 @@ export default function NavBar() {
   };
 
   const setUserInfo = (userData) => {
-    setUserName(userData)
-  }
+    setUserName(userData);
+    localStorage.setItem('userData', JSON.stringify(userData));
+  };
 
   useEffect(() => {
     fetch("http://localhost:3000/user_sess", {
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => {setUserInSession(data.user_in_session)});
+      .then((data) => {
+        setUserInSession(data.user_in_session);
+      });
   }, []);
 
-  console.log(userName)
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      setUserName(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  console.log(userName, userInSession);
 
   return (
     <Box
@@ -271,7 +282,7 @@ export default function NavBar() {
             setSignUp={setSignUp}
             setSignUpSuccess={setSignUpSuccess}
             setUserInSession={setUserInSession}
-            setUserInfo = {setUserInfo}
+            setUserInfo={setUserInfo}
           />
           <Box sx={{ flexGrow: 1 }} />
           {userInSession ? (
@@ -323,7 +334,7 @@ export default function NavBar() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <UserAvatar user = {userName}/>
               </IconButton>
             </Box>
           )}

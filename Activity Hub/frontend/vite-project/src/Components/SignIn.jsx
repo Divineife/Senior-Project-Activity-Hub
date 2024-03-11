@@ -39,7 +39,7 @@ export default function SignIn({
   setSignUp,
   setSignUpSuccess,
   setUserInSession,
-  setUserInfo
+  setUserInfo,
 }) {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
@@ -58,7 +58,7 @@ export default function SignIn({
       console.log("Login Success", response.status);
       setSignUpSuccess(false);
       setUserInSession(true);
-      setUserInfo(response.data.user)
+      setUserInfo(response.data.user);
       navigate("/");
     } catch (error) {
       console.error("Error signing in:", error.message);

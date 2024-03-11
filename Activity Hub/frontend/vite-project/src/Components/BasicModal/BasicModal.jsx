@@ -17,7 +17,7 @@ const BasicModal = ({
   setSignUp,
   setSignUpSuccess,
   setUserInSession,
-  setUserInfo
+  setUserInfo,
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
@@ -33,7 +33,7 @@ const BasicModal = ({
               setSignIn={setSignIn}
               setSignUpSuccess={setSignUpSuccess}
               setUserInSession={setUserInSession}
-              setUserInfo = {setUserInfo}
+              setUserInfo={setUserInfo}
             />
           )}
           {sessionState == "signIn" && (
@@ -41,7 +41,7 @@ const BasicModal = ({
               setSignUp={setSignUp}
               setSignUpSuccess={setSignUpSuccess}
               setUserInSession={setUserInSession}
-              setUserInfo = {setUserInfo}
+              setUserInfo={setUserInfo}
             />
           )}
         </Box>
