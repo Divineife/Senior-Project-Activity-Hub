@@ -110,6 +110,9 @@ def signup():
     first_name = data.get('firstName')
     last_name = data.get('lastName')
 
+    user_name = {"fName" : first_name,
+                 "lName" : last_name}
+
     # Check if the email already exists
     if get_user_by_email(email):
         return jsonify(error='Email already exists'), 409
@@ -119,7 +122,7 @@ def signup():
     # Check if user creation was successful
     if user_id:
         session['user_id'] = user_id
-        return jsonify(message='User registered successfully'), 201
+        return jsonify(message='User registered successfully', user  = user_name), 201
     else:
         return jsonify(error='Failed to create user'), 500
 

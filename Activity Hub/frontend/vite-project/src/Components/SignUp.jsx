@@ -42,6 +42,7 @@ export default function SignUp({
   setSignIn,
   setSignUpSuccess,
   setUserInSession,
+  setUserInfo,
 }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -72,6 +73,7 @@ export default function SignUp({
       console.log("Sign Up Success", response.data);
       setSignUpSuccess(false);
       setUserInSession(true);
+      setUserInfo(response.data.user);
       navigate("/");
     } catch (error) {
       console.error(error.response.data);

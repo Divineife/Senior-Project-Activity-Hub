@@ -17,7 +17,6 @@ import Button from "@mui/material/Button";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import NewUserModal from "./Modals/NewUserModal";
 import UserAvatar from "./userAvatar";
-import { Avatar } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,7 +70,7 @@ export default function NavBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
   const [userInSession, setUserInSession] = useState(false);
-  const [userName, setUserName] = useState(1);
+  const [userName, setUserName] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -118,11 +117,12 @@ export default function NavBar() {
   const handleLogout = async () => {
     await logout();
     setUserInSession(false);
+    setUserName(null);
     navigate("/");
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  const renderMenu = () => (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
@@ -144,7 +144,7 @@ export default function NavBar() {
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
+  const renderMobileMenu = () => (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
@@ -188,7 +188,7 @@ export default function NavBar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <UserAvatar user = {userName}/>
+          <UserAvatar user={userName} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -211,7 +211,7 @@ export default function NavBar() {
 
   const setUserInfo = (userData) => {
     setUserName(userData);
-    localStorage.setItem('userData', JSON.stringify(userData));
+    localStorage.setItem("userData", JSON.stringify(userData));
   };
 
   useEffect(() => {
@@ -225,7 +225,7 @@ export default function NavBar() {
   }, []);
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
+    const storedUserData = localStorage.getItem("userData");
     if (storedUserData) {
       setUserName(JSON.parse(storedUserData));
     }
@@ -334,7 +334,7 @@ export default function NavBar() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <UserAvatar user = {userName}/>
+                <UserAvatar user={userName} />
               </IconButton>
             </Box>
           )}
@@ -353,8 +353,9 @@ export default function NavBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+
+      {userInSession && renderMobileMenu()}
+      {userInSession && renderMenu()}
     </Box>
   );
 }
