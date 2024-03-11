@@ -4,7 +4,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
@@ -235,8 +234,11 @@ export default function NavBar() {
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box
+      sx={{ flexGrow: 1 }}
+      style={{ paddingLeft: "0px", paddingRight: "0px" }}
+    >
+      <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
             component="a"
@@ -259,10 +261,11 @@ export default function NavBar() {
           </Search>
           {userInSession && (
             <Button
-              size="large"
+              size="small"
               aria-haspopup="true"
               variant="contained"
               onClick={addEvent}
+              style={{ marginRight: "15px", margin: "10px 15px 10px 0px" }}
             >
               {"ADD Event"}
             </Button>
@@ -283,7 +286,7 @@ export default function NavBar() {
           <Box sx={{ flexGrow: 1 }} />
           {userInSession ? (
             <Button
-              size="large"
+              size="small"
               aria-haspopup="true"
               variant="contained"
               onClick={handleLogout}

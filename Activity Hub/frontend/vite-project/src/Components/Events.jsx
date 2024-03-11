@@ -25,7 +25,12 @@ function Events() {
   }, []);
 
   return (
-    <Grid container spacing={3} rowSpacing={4} className="event-list-container">
+    <Grid
+      container
+      spacing={3}
+      rowSpacing={4}
+      sx={{ backgroundColor: "#edf3f9", width: "100%", height: "100%" }}
+    >
       {events.map((event, index) => (
         <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
           <Event key={index} event={event} />
