@@ -33,14 +33,13 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignIn({
   setSignUp,
   setSignUpSuccess,
   setUserInSession,
+  setUserInfo
 }) {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
@@ -56,13 +55,12 @@ export default function SignIn({
         email,
         password,
       });
-      // Handle successful signIn (e.g., redirect to a dashboard)
       console.log("Login Success", response.status);
       setSignUpSuccess(false);
       setUserInSession(true);
+      setUserInfo(response.data.user)
       navigate("/");
     } catch (error) {
-      // Handle error (e.g., display error message)
       console.error("Error signing in:", error.message);
     }
   };

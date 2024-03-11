@@ -70,6 +70,7 @@ export default function NavBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
   const [userInSession, setUserInSession] = useState(false);
+  const [userName, setUserName] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -99,24 +100,6 @@ export default function NavBar() {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const handleDeleteEvent = async () => {
-    try {
-      const eventId = location.pathname;
-      const id = eventId.match(pattern);
-      const url = "http://localhost:3000/events/" + id[6];
-      const response = await axios.delete(url);
-
-      if (response.data.success) {
-        console.log("Event deleted successfully");
-        navigate("/");
-      } else {
-        console.error("Error deleting event:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   const logout = async () => {
@@ -225,13 +208,19 @@ export default function NavBar() {
     setSignUpSuccess(true);
   };
 
+  const setUserInfo = (userData) => {
+    setUserName(userData)
+  }
+
   useEffect(() => {
     fetch("http://localhost:3000/user_sess", {
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => setUserInSession(data.user_in_session));
+      .then((data) => {setUserInSession(data.user_in_session)});
   }, []);
+
+  console.log(userName)
 
   return (
     <Box
@@ -282,6 +271,7 @@ export default function NavBar() {
             setSignUp={setSignUp}
             setSignUpSuccess={setSignUpSuccess}
             setUserInSession={setUserInSession}
+            setUserInfo = {setUserInfo}
           />
           <Box sx={{ flexGrow: 1 }} />
           {userInSession ? (
@@ -304,37 +294,39 @@ export default function NavBar() {
             </Button>
           )}
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
+          {userInSession && (
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+          )}
 
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

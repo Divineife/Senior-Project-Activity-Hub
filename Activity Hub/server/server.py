@@ -78,7 +78,6 @@ def get_event_img(img_id):
 @app.route('/events/<event_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_event_route(event_id):
-    
     event = get_event_by_id(event_id)
     event['_id'] = str(event['_id'])
     event['eventImgId'] = str(event.get('eventImgId'))
@@ -128,7 +127,6 @@ def signup():
 @cross_origin(supports_credentials=True)
 def login():
     data = request.json
-    # Your login logic here
     email = data.get('email')
     password = data.get('password')
 
@@ -140,13 +138,14 @@ def login():
     # Check if the password is correct
     if not check_password(user['password'], password):
         return jsonify(error='Invalid password'), 401
+    user_name = {"fName" : user["first_name"],
+                 "lName" : user["last_name"]}
 
     session['user_id'] = str(user['_id'])
-    return jsonify(message= session.get("user_id")), 200
+    return jsonify(message= session.get("user_id"), user = user_name), 200
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    # Your logout logic here
     session.pop('user_id', None)
     return jsonify(message='Logged out successfully'), 200
 
@@ -154,7 +153,7 @@ def logout():
 @cross_origin(supports_credentials=True)
 def user():
     if session.get("user_id"):
-        return jsonify({"user_in_session": True})
+        return jsonify({"user_in_session": True, "user_id": session["user_id"]})
     else:
         return jsonify({"user_in_session": False})
     
