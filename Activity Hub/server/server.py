@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 from db import *
 from img_upload import *
 from event_utils import EventUtils
+from mapBox import MapBox
 from flask_session import Session
 from flask_login import LoginManager
 
@@ -23,6 +24,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 event_utils = EventUtils()
+mapbox = MapBox()
 Session(app)
 CORS(app, supports_credentials = True)
 
@@ -60,6 +62,9 @@ def add_event():
     data["eventLocation"] = request.form.get('eventLocation')
     data["selectedVisibility"] = request.form.get('selectedVisibility')
     data["author"] = id
+    eventLocation = request.form.get('eventLocation')
+    geolocation = mapbox.geocode(eventLocation)
+    data["geometry"] = geolocation['features'][0]['geometry']['coordinates']
 
     file = request.files['eventImage']
     src = upload_img(file)

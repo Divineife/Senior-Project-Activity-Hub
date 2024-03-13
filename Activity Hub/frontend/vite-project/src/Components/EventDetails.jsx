@@ -108,7 +108,7 @@ function EventDetails() {
       console.error("Error:", error);
     }
   };
-
+  
   return (
     <Card
       sx={{
@@ -141,7 +141,7 @@ function EventDetails() {
       <div style={{ marginBottom: 20 }}></div>
 
       <Paper elevation={20}>
-        <MapBox />
+        <MapBox eventDetails = {eventDetails}/>
       </Paper>
 
       <Paper
