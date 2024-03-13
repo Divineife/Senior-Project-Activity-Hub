@@ -231,8 +231,6 @@ export default function NavBar() {
     }
   }, []);
 
-  console.log(userName, userInSession);
-
   return (
     <Box
       sx={{ flexGrow: 1 }}

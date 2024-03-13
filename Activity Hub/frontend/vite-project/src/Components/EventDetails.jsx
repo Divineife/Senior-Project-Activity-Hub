@@ -1,5 +1,5 @@
-import { Container, Typography, Paper } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Typography, Paper } from "@mui/material";
+import { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -10,6 +10,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import MapBox from "./MapBox";
 
 function EventDetails() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ function EventDetails() {
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const [imgUrl, setImgUrl] = useState(false);
+  const mapContainer = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ function EventDetails() {
         setError(error.message);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (eventDetails) {
@@ -116,52 +118,61 @@ function EventDetails() {
         backgroundColor: "#edf3f9",
       }}
     >
-      <Stack direction="column" spacing={2}>
-        <Chip
-          sx={{ borderRadius: 0, backgroundColor: "#edf3f9", fontSize: 20 }}
-          label="Details Page"
-        />
-        <CardMedia
-          component="img"
-          sx={{ height: 200 }}
-          image={imgUrl ? imgUrl : null}
-        />
-        <Typography gutterBottom variant="h5" component="div">
-          {eventDetails.eventName}
-        </Typography>
-        <Typography gutterBottom variant="h9" component="div">
-          {eventDetails.eventDescription}
-        </Typography>
-        <Paper
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-          elevation={3}
-        >
-          {isOwner && (
-            <Button
-              size="large"
-              aria-haspopup="true"
-              variant="contained"
-              onClick={handleDeleteEvent}
-            >
-              {"Delete Event"}
-            </Button>
-          )}
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
-          {isOwner && (
-            <Button size="large" aria-haspopup="true" variant="contained">
-              {"Edit Event"}
-            </Button>
-          )}
-        </Paper>
-      </Stack>
+      <Paper elevation={4}>
+        <Stack direction="column" spacing={2}>
+          <Chip
+            sx={{ borderRadius: 0, backgroundColor: "#edf3f9", fontSize: 20 }}
+            label="Details Page"
+          />
+          <CardMedia
+            component="img"
+            sx={{ height: 200 }}
+            image={imgUrl ? imgUrl : null}
+          />
+          <Typography gutterBottom variant="h5" component="div">
+            {eventDetails.eventName}
+          </Typography>
+          <Typography gutterBottom variant="h9" component="div">
+            {eventDetails.eventDescription}
+          </Typography>
+        </Stack>
+      </Paper>
+
+      <div style={{ marginBottom: 20 }}></div>
+
+      <Paper elevation={20}>
+        <MapBox />
+      </Paper>
+
+      <Paper
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+        elevation={3}
+      >
+        {isOwner && (
+          <Button
+            size="large"
+            aria-haspopup="true"
+            variant="contained"
+            onClick={handleDeleteEvent}
+          >
+            {"Delete Event"}
+          </Button>
+        )}
+        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
+        {isOwner && (
+          <Button size="large" aria-haspopup="true" variant="contained">
+            {"Edit Event"}
+          </Button>
+        )}
+      </Paper>
     </Card>
   );
 }
