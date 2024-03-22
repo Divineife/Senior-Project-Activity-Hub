@@ -18,6 +18,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_NAME'] = 'flask_session'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -33,7 +34,7 @@ def home():
 @app.route('/events', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    # print("SESHHHH", session)
+    print("SESHHHH", session)
     events = get_all_events()
     if session.get('user_id'):
         user = get_user_by_id(session['user_id'])
