@@ -1,0 +1,6 @@
+Notes of issues I faced and fix
+Started this late so does not have earlier hacks
+
+Activating virtual environment to ensure proper package installation 
+    |- source venv/bin/activate   
+
