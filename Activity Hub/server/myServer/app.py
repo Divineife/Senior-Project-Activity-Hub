@@ -1,12 +1,10 @@
 import os
-import sys
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
 from . import db
 from . import img
 from . import event_utils
 from . import mapBox
-
 
 from flask_session import Session
 from flask_login import LoginManager
