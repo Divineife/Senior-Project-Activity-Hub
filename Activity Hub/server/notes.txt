@@ -1,0 +1,18 @@
+Notes of issues I faced and fix
+Started this late so does not have earlier hacks
+
+Activating virtual environment to ensure proper package installation 
+    |- source venv/bin/activate ; ensure you are in the right directory
+    |- source deactivate        ; for deactivation 
+    |- which python             ; to see what python we are using
+    |- pip install -r requirements.txt ; to install all our requirements
+
+Creating requirements.txt
+    |- pip freeze > requirements.txt 
+
+Using imports
+    |- python -m mypackage.mymodule ; to run with relative imports, run one level above folder holding script
+
+Checking test coverage
+    |- pytest --cov=my_module
+    
