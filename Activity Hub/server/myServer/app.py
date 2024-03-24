@@ -2,17 +2,10 @@ import os
 import sys
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
-import sys
-print(sys.path)
-# from myServer import db
-import db
-# sys.path.append('/Users/DIVINE/Desktop/Projects/Senior-Project-Activity-Hub/Activity Hub/server/myServer/server.py')
-# from . import db
-# import db
-
-import img
-import event_utils
-import mapBox
+from . import db
+from . import img
+from . import event_utils
+from . import mapBox
 
 
 from flask_session import Session
@@ -29,6 +22,8 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_NAME'] = 'your_desired_cookie_name'
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -38,7 +33,7 @@ CORS(app, supports_credentials = True)
 
 @app.route("/")
 def home():
-    return "<p>Hello, World!</p>"
+    return jsonify({"message" : "<p>Hello, World!</p>"})
 
 @app.route('/events', methods=['GET'])
 @cross_origin(supports_credentials=True)
