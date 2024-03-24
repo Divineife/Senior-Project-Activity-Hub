@@ -1,5 +1,4 @@
-
-def filter_events(self, events, user):
+def filter_events(events, user):
     filtered_events_by_school = []
     user_school = user['school'].upper()
     for event in events:
