@@ -15,4 +15,6 @@ Using imports
 
 Checking test coverage
     |- pytest --cov=my_module
-    
+
+Divergent branch
+    |- git config pull.rebase false
