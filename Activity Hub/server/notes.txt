@@ -18,3 +18,6 @@ Checking test coverage
 
 Divergent branch
     |- git config pull.rebase false
+
+formatting setup with prettier
+    |- npm run format
