@@ -75,6 +75,11 @@ def add_event():
     inserted_id = db.create_event(data, id)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
 
+val = "/editEvent/${event_id}"
+@app.route('/editEvent/<int:event_id>', methods=['GET', 'POST'])
+def edit_event(event_id):
+    return f"Editing event with ID {event_id}"
+
 @app.route('/image/<img_id>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_event_img(img_id):

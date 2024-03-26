@@ -108,7 +108,12 @@ function EventDetails() {
       console.error("Error:", error);
     }
   };
-  
+
+  const handleEditEvent = async (id) => {
+    const event_id = eventDetails["_id"];
+    navigate(`/editEvent/${event_id}`);
+  };
+
   return (
     <Card
       sx={{
@@ -141,7 +146,7 @@ function EventDetails() {
       <div style={{ marginBottom: 20 }}></div>
 
       <Paper elevation={20}>
-        <MapBox eventDetails = {eventDetails}/>
+        <MapBox eventDetails={eventDetails} />
       </Paper>
 
       <Paper
@@ -168,7 +173,12 @@ function EventDetails() {
         <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
         <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
         {isOwner && (
-          <Button size="large" aria-haspopup="true" variant="contained">
+          <Button
+            size="large"
+            aria-haspopup="true"
+            variant="contained"
+            onClick={handleEditEvent}
+          >
             {"Edit Event"}
           </Button>
         )}

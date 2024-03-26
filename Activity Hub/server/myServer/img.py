@@ -20,7 +20,8 @@ import cloudinary.uploader
 import cloudinary.api
 
 def upload_img(file):
-    res = cloudinary.uploader.upload(file, unique_filename = False, overwrite=True)
+    print(file)
+    res = cloudinary.uploader.upload(file, overwrite=True)
     del(res['api_key'])
     return res
 
