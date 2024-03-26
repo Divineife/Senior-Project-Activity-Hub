@@ -68,11 +68,11 @@ def add_event():
     data["geometry"] = geolocation['features'][0]['geometry']['coordinates']
 
     file = request.files['eventImage']
-    src = img.upload_img(file)
-    image_id = db.create_image(src)
-    data['eventImgId'] = image_id
+    # src = img.upload_img(file)
+    # image_id = db.create_image(src)
+    # data['eventImgId'] = image_id
 
-    # inserted_id = db.create_event(data, id)
+    inserted_id = db.create_event(data, id)
     return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
 
 val = "/editEvent/${event_id}"
