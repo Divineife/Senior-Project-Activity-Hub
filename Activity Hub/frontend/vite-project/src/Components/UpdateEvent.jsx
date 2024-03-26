@@ -12,12 +12,21 @@ import Visibility from "../Components/CommonButton/Visibility";
 import CardMedia from "@mui/material/CardMedia";
 import { useNavigate, useParams } from "react-router-dom";
 
+function convertToList(str) {
+    if (typeof str !== 'string') {
+        return [];
+      }
+      const array = str.split(',');
+      return array.map(item => item.trim());
+  }
+
 const EventForm = () => {
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [selectedVisibility, setSelectedVisibility] = useState(null);
   const [eventDetails, setEventDetails] = useState(null);
+  const [eventImgId, setEventImgId] = useState(null)
   const { event_id } = useParams();
   const [imgUrl, setImgUrl] = useState(false);
   const navigate = useNavigate();
@@ -25,6 +34,8 @@ const EventForm = () => {
   const handleVisibilityChange = (newVisibility) => {
     setSelectedVisibility(newVisibility);
   };
+
+  
   useEffect(() => {
     const fetchEventData = async () => {
       try {
@@ -35,10 +46,11 @@ const EventForm = () => {
         console.log(eventData);
         setEventDetails(eventData);
         setEventName(eventData.eventName);
+        setEventLocation(eventData.eventLocation)
         setEventDescription(eventData.eventDescription);
-        setEventLocation(eventData.eventLocation);
-        setSelectedVisibility(eventData.selectedVisibility);
-        handleVisibilityChange(eventData.selectedVisibility)
+        setSelectedVisibility(convertToList(eventData.selectedVisibility));
+        setEventImgId(eventData.eventImgId)
+
       } catch (error) {
         console.error("Error fetching event data:", error);
       }
@@ -67,10 +79,44 @@ const EventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form submission logic remains the same
-    // ...
+  
+    const formData = {
+      eventName,
+      eventDescription,
+      eventLocation,
+      selectedVisibility,
+      eventImgId,
+      // Any other data you want to send in the request body
+    };
+  
+    try {
+      const response = await fetch(`http://localhost:3000/event/update/${event_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any additional headers if needed
+        },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to update event");
+      }
+  
+      // Handle success response
+      // For example, redirect to another page
+      navigate("/success");
+    } catch (error) {
+      console.error("Error updating event:", error);
+      // Handle error, display error message to the user, etc.
+    }
   };
-  console.log("Main", selectedVisibility)
+  
+  
+
+  
+  console.log("Main", typeof(selectedVisibility), selectedVisibility)
 
   return (
     <div>

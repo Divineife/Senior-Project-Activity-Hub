@@ -20,7 +20,7 @@ const MenuProps = {
     },
   },
 };
-const text = "Who shoud see your event on their feed";
+const text = "Who should see your event on their feed";
 
 const names = ["FISK", "MEHARRY", "TSU", "VANDERBILT"];
 
@@ -33,9 +33,16 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function Visibility({ onVisibilityChange }) {
+export default function Visibility({ selectedVisibility, onVisibilityChange }) {
   const theme = useTheme();
-  const [visibility, setVisibility] = React.useState([]);
+  const [visibility, setVisibility] = React.useState(selectedVisibility || []);
+
+  // useEffect to trigger on initial render and when selectedVisibility changes
+  React.useEffect(() => {
+    console.log("CALLED", selectedVisibility)
+    setVisibility(selectedVisibility || []);
+    onVisibilityChange(selectedVisibility || []);
+  }, []);
 
   const handleChange = (event) => {
     const {
@@ -43,12 +50,11 @@ export default function Visibility({ onVisibilityChange }) {
     } = event;
     setVisibility(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value,
+      typeof value === "string" ? value.split(",") : value
     );
+    console.log("GOT", event.target.value)
     onVisibilityChange(event.target.value);
   };
-
-  //   console.log("Selected", selectedVisibility)
 
   return (
     <div>
