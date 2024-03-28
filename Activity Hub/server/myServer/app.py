@@ -8,160 +8,205 @@ from . import mapBox
 
 from flask_session import Session
 from flask_login import LoginManager
+
 app = Flask(__name__)
 
 secret_key = os.environ.get("SECRET_KEY")
 app.secret_key = secret_key
 
-app.config['SECRET_KEY'] = secret_key
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config["SECRET_KEY"] = secret_key
+app.config["SESSION_TYPE"] = "filesystem"
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_COOKIE_NAME'] = 'your_desired_cookie_name'
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_USE_SIGNER"] = True
+app.config["SESSION_COOKIE_NAME"] = "your_desired_cookie_name"
 
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 Session(app)
-CORS(app, supports_credentials = True)
+CORS(app, supports_credentials=True)
+
 
 @app.route("/")
 def home():
-    return jsonify({"message" : "<p>Hello, World!</p>"})
+    return jsonify({"message": "<p>Hello, World!</p>"})
 
-@app.route('/events', methods=['GET'])
+
+@app.route("/events", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
     # print("SESHHHH", session)
     events = db.get_all_events()
-    if session.get('user_id'):
-        user = db.get_user_by_id(session['user_id'])
+    if session.get("user_id"):
+        user = db.get_user_by_id(session["user_id"])
         user_events = event_utils.filter_events(events, user)
 
     else:
         for event in events:
-            event['eventImgId'] = str(event.get('eventImgId'))
-            event['_id'] = str(event.get('_id'))
+            event["eventImgId"] = str(event.get("eventImgId"))
+            event["_id"] = str(event.get("_id"))
         user_events = events
 
     return jsonify(user_events), 200
 
-@app.route('/addEvent', methods=['POST'])
+
+@app.route("/addEvent", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def add_event():
-    if 'eventImage' not in request.files:
-        return jsonify({'error': 'No file part'})
-    
+    if "eventImage" not in request.files:
+        return jsonify({"error": "No file part"})
+
     id = session["user_id"]
     data = {}
-    data["eventName"] = request.form.get('eventName')
-    data["eventDescription"] = request.form.get('eventDescription')
-    data["eventLocation"] = request.form.get('eventLocation')
-    data["selectedVisibility"] = request.form.get('selectedVisibility')
+    data["eventName"] = request.form.get("eventName")
+    data["eventDescription"] = request.form.get("eventDescription")
+    data["eventLocation"] = request.form.get("eventLocation")
+    data["selectedVisibility"] = request.form.get("selectedVisibility")
     data["author"] = id
-    eventLocation = request.form.get('eventLocation')
+    eventLocation = request.form.get("eventLocation")
     geolocation = mapBox.geocode(eventLocation)
-    data["geometry"] = geolocation['features'][0]['geometry']['coordinates']
+    data["geometry"] = geolocation["features"][0]["geometry"]["coordinates"]
 
-    file = request.files['eventImage']
+    file = request.files["eventImage"]
     src = img.upload_img(file)
     image_id = db.create_image(src)
-    data['eventImgId'] = image_id
+    data["eventImgId"] = image_id
 
     inserted_id = db.create_event(data, id)
-    return jsonify({'success': True, 'inserted_id': str(inserted_id)}), 200
+    return jsonify({"success": True, "inserted_id": str(inserted_id)}), 200
 
-val = "/editEvent/${event_id}"
-@app.route('/editEvent/<int:event_id>', methods=['GET', 'POST'])
+
+@app.route("/editEvent/<event_id>", methods=["PUT"])
+@cross_origin(supports_credentials=True)
 def edit_event(event_id):
-    return f"Editing event with ID {event_id}"
+    if not db.event_exists(event_id):
+        return jsonify({"error": "Event not found"}), 404
 
-@app.route('/image/<img_id>', methods=['GET'])
+    # Extract data from the request
+    data = {}
+    data["eventName"] = request.form.get("eventName")
+    data["eventDescription"] = request.form.get("eventDescription")
+    data["eventLocation"] = request.form.get("eventLocation")
+    data["selectedVisibility"] = request.form.get("selectedVisibility")
+    data["eventImgId"] = request.form.get("curEventImage")
+
+    eventLocation = request.form.get("eventLocation")
+    geolocation = mapBox.geocode(eventLocation)
+    data["geometry"] = geolocation["features"][0]["geometry"]["coordinates"]
+
+    if "newEventImg" in request.files:
+        try:
+            img_Obj = db.get_img_by_id(data["eventImgId"])
+            res = img.delete_img(img_Obj["public_id"])
+        except Exception as e:
+            return jsonify({"errMessage": "Failure during deletion"}), 500
+
+        file = request.files["newEventImg"]
+        src = img.upload_img(file)
+        image_id = db.create_image(src)
+        data["eventImgId"] = image_id
+
+    document_count = db.update_event(event_id, data)
+    if document_count < 1:
+        return jsonify({"err Message": "Failed to update collection"}), 500
+
+    print("DATA", data)
+    return jsonify({"success": True}), 200
+
+
+@app.route("/image/<img_id>", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_event_img(img_id):
     img = db.get_img_by_id(img_id)
-    return jsonify({'result': img['url']})
+    return jsonify({"result": img["url"]})
 
-@app.route('/events/<event_id>', methods=['GET'])
+
+@app.route("/events/<event_id>", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_event_route(event_id):
     event = db.get_event_by_id(event_id)
-    event['_id'] = str(event['_id'])
-    event['eventImgId'] = str(event.get('eventImgId'))
+    event["_id"] = str(event["_id"])
+    event["eventImgId"] = str(event.get("eventImgId"))
     if event:
         return jsonify(event), 200
     else:
-        return jsonify({'error': 'Event not found'}), 404
+        return jsonify({"error": "Event not found"}), 404
 
-@app.route('/events/<event_id>', methods=['DELETE'])
+
+@app.route("/events/<event_id>", methods=["DELETE"])
 def delete_event_route(event_id):
-    img_id = request.args.get('imgId') 
+    img_id = request.args.get("imgId")
     try:
         img_Obj = db.get_img_by_id(img_id)
         res = img.delete_img(img_Obj["public_id"])
         delete_result = db.delete_event(event_id, img_id)
 
-        if delete_result.deleted_count == 1 and res['result'] == 'ok':
-            return jsonify({'success': True, 'message': 'Event deleted successfully'}), 200
+        if delete_result.deleted_count == 1 and res["result"] == "ok":
+            return (
+                jsonify({"success": True, "message": "Event deleted successfully"}),
+                200,
+            )
         else:
-            return jsonify({'success': False, 'message': 'Event not found'}), 404
+            return jsonify({"success": False, "message": "Event not found"}), 404
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
+        return jsonify({"success": False, "message": str(e)}), 500
 
-@app.route('/signUp', methods=['POST'])
+
+@app.route("/signUp", methods=["POST"])
 def signup():
     data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    school = data.get('school')
-    first_name = data.get('firstName')
-    last_name = data.get('lastName')
+    email = data.get("email")
+    password = data.get("password")
+    school = data.get("school")
+    first_name = data.get("firstName")
+    last_name = data.get("lastName")
 
-    user_name = {"fName" : first_name,
-                 "lName" : last_name}
+    user_name = {"fName": first_name, "lName": last_name}
 
     # Check if the email already exists
     if db.get_user_by_email(email):
-        return jsonify(error='Email already exists'), 409
+        return jsonify(error="Email already exists"), 409
 
     # Create a new user
     user_id = db.create_user(email, password, school, first_name, last_name)
     # Check if user creation was successful
     if user_id:
-        session['user_id'] = user_id
-        return jsonify(message='User registered successfully', user  = user_name), 201
+        session["user_id"] = user_id
+        return jsonify(message="User registered successfully", user=user_name), 201
     else:
-        return jsonify(error='Failed to create user'), 500
+        return jsonify(error="Failed to create user"), 500
 
-@app.route('/login', methods=['POST'])
+
+@app.route("/login", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def login():
     data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    email = data.get("email")
+    password = data.get("password")
 
     # Check if the user exists
     user = db.get_user_by_email(email)
     if not user:
-        return jsonify(error='User not found'), 404
+        return jsonify(error="User not found"), 404
 
     # Check if the password is correct
-    if not db.check_password(user['password'], password):
-        return jsonify(error='Invalid password'), 401
-    user_name = {"fName" : user["first_name"],
-                 "lName" : user["last_name"]}
+    if not db.check_password(user["password"], password):
+        return jsonify(error="Invalid password"), 401
+    user_name = {"fName": user["first_name"], "lName": user["last_name"]}
 
-    session['user_id'] = str(user['_id'])
-    return jsonify(message= session.get("user_id"), user = user_name), 200
+    session["user_id"] = str(user["_id"])
+    return jsonify(message=session.get("user_id"), user=user_name), 200
 
-@app.route('/logout', methods=['POST'])
+
+@app.route("/logout", methods=["POST"])
 def logout():
-    session.pop('user_id', None)
-    return jsonify(message='Logged out successfully'), 200
+    session.pop("user_id", None)
+    return jsonify(message="Logged out successfully"), 200
+
 
 @app.route("/user_sess")
 @cross_origin(supports_credentials=True)
@@ -170,24 +215,28 @@ def user():
         return jsonify({"user_in_session": True, "user_id": session["user_id"]})
     else:
         return jsonify({"user_in_session": False})
-    
+
+
 @app.route("/user/validate")
 @cross_origin(supports_credentials=True)
 def validate():
-    if 'user_id' in session:
+    if "user_id" in session:
         return "True"
     return "False"
 
-@app.route("/validate/<author>", methods=['GET'])
+
+@app.route("/validate/<author>", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def check_author(author):
-    if author == session['user_id']:
-        return jsonify({'result': True})
-    return jsonify({'result': False})
+    if author == session["user_id"]:
+        return jsonify({"result": True})
+    return jsonify({"result": False})
+
 
 def validate_owner(user_id):
     res = db.get_user_by_id(user_id)
-    return res['_id'] == user_id
+    return res["_id"] == user_id
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=3000, debug=True)
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=3000, debug=True)

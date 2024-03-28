@@ -74,7 +74,10 @@ const EventForm = () => {
               <InputLabel>Event Location</InputLabel>
               <Input
                 value={eventLocation}
-                onChange={(e) => setEventLocation(e.target.value)}
+                onChange={(e) => {
+                  setEventLocation(e.target.value);
+                  console.log("Data", eventImage);
+                }}
               ></Input>
             </FormControl>
             <FormControl>

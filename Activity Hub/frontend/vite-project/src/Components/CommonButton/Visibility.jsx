@@ -40,7 +40,7 @@ export default function Visibility({ selectedVisibility, onVisibilityChange }) {
   React.useEffect(() => {
     setVisibility(selectedVisibility || []);
     onVisibilityChange(selectedVisibility || []);
-  },[selectedVisibility]);
+  }, [selectedVisibility]);
 
   const handleChange = (event) => {
     const {
@@ -48,7 +48,7 @@ export default function Visibility({ selectedVisibility, onVisibilityChange }) {
     } = event;
     setVisibility(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === "string" ? value.split(",") : value,
     );
     onVisibilityChange(event.target.value);
   };

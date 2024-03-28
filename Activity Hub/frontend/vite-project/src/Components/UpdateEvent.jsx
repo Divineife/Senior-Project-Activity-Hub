@@ -11,14 +11,15 @@ import Paper from "@mui/material/Paper";
 import Visibility from "../Components/CommonButton/Visibility";
 import CardMedia from "@mui/material/CardMedia";
 import { useNavigate, useParams } from "react-router-dom";
+import TextField from "@mui/material/TextField";
 
 function convertToList(str) {
-    if (typeof str !== 'string') {
-        return [];
-      }
-      const array = str.split(',');
-      return array.map(item => item.trim());
+  if (typeof str !== "string") {
+    return [];
   }
+  const array = str.split(",");
+  return array.map((item) => item.trim());
+}
 
 const EventForm = () => {
   const [eventName, setEventName] = useState("");
@@ -26,7 +27,8 @@ const EventForm = () => {
   const [eventLocation, setEventLocation] = useState("");
   const [selectedVisibility, setSelectedVisibility] = useState(null);
   const [eventDetails, setEventDetails] = useState(null);
-  const [eventImgId, setEventImgId] = useState(null)
+  const [curEventImage, setCurEventImage] = useState(null);
+  const [newEventImg, setNewEventImg] = useState(null);
   const { event_id } = useParams();
   const [imgUrl, setImgUrl] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +37,6 @@ const EventForm = () => {
     setSelectedVisibility(newVisibility);
   };
 
-  
   useEffect(() => {
     const fetchEventData = async () => {
       try {
@@ -43,14 +44,12 @@ const EventForm = () => {
           `http://localhost:3000/events/${event_id}`,
         );
         const eventData = await response.json();
-        console.log(eventData);
         setEventDetails(eventData);
         setEventName(eventData.eventName);
-        setEventLocation(eventData.eventLocation)
+        setEventLocation(eventData.eventLocation);
         setEventDescription(eventData.eventDescription);
         setSelectedVisibility(convertToList(eventData.selectedVisibility));
-        setEventImgId(eventData.eventImgId)
-
+        setCurEventImage(eventData.eventImgId);
       } catch (error) {
         console.error("Error fetching event data:", error);
       }
@@ -59,7 +58,6 @@ const EventForm = () => {
     fetchEventData();
   }, [event_id]);
 
-  
   useEffect(() => {
     if (eventDetails) {
       fetch(`http://localhost:3000/image/` + eventDetails.eventImgId, {
@@ -79,42 +77,32 @@ const EventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const formData = {
-      eventName,
-      eventDescription,
-      eventLocation,
-      selectedVisibility,
-      eventImgId,
-      // Any other data you want to send in the request body
-    };
-  
+    const formData = new FormData();
+    formData.append("eventName", eventName);
+    formData.append("eventDescription", eventDescription);
+    formData.append("eventLocation", eventLocation);
+    formData.append("selectedVisibility", selectedVisibility);
+    formData.append("curEventImage", curEventImage);
+    formData.append("newEventImg", newEventImg);
+
     try {
-      const response = await fetch(`http://localhost:3000/event/update/${event_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          // Add any additional headers if needed
+      const response = await fetch(
+        `http://localhost:3000/editEvent/${event_id}`,
+        {
+          method: "PUT",
+          body: formData,
+          credentials: "include",
         },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
-  
+      );
+
       if (!response.ok) {
         throw new Error("Failed to update event");
       }
-  
-      // Handle success response
-      // For example, redirect to another page
-      navigate("/success");
+      navigate(`/eventDetails/${event_id}`);
     } catch (error) {
       console.error("Error updating event:", error);
-      // Handle error, display error message to the user, etc.
     }
   };
-
-  console.log("Visivility", typeof(selectedVisibility), selectedVisibility)
-
   return (
     <div>
       <InputLabel>Edit Event Form</InputLabel>
@@ -147,6 +135,15 @@ const EventForm = () => {
               sx={{ height: 200 }}
               image={imgUrl ? imgUrl : null}
             />
+            <InputLabel>
+              You may or may not change current Event Image
+            </InputLabel>
+            <FormControl>
+              <TextField
+                type="file"
+                onChange={(e) => setNewEventImg(e.target.files[0])}
+              />
+            </FormControl>
             <FormControl>
               <Visibility
                 selectedVisibility={selectedVisibility}
