@@ -37,12 +37,10 @@ export default function Visibility({ selectedVisibility, onVisibilityChange }) {
   const theme = useTheme();
   const [visibility, setVisibility] = React.useState(selectedVisibility || []);
 
-  // useEffect to trigger on initial render and when selectedVisibility changes
   React.useEffect(() => {
-    console.log("CALLED", selectedVisibility)
     setVisibility(selectedVisibility || []);
     onVisibilityChange(selectedVisibility || []);
-  }, []);
+  },[selectedVisibility]);
 
   const handleChange = (event) => {
     const {
@@ -52,7 +50,6 @@ export default function Visibility({ selectedVisibility, onVisibilityChange }) {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log("GOT", event.target.value)
     onVisibilityChange(event.target.value);
   };
 

@@ -112,11 +112,8 @@ const EventForm = () => {
       // Handle error, display error message to the user, etc.
     }
   };
-  
-  
 
-  
-  console.log("Main", typeof(selectedVisibility), selectedVisibility)
+  console.log("Visivility", typeof(selectedVisibility), selectedVisibility)
 
   return (
     <div>
