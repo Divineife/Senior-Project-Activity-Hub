@@ -4,8 +4,12 @@ from . import db
 from . import img
 from . import event_utils
 from . import mapBox
-from . config import create_app
+from . tasks import flask_app, long_running_task
+from .config import create_app
+from celery.result import AsyncResult
 
+# from . import config
+# create_app = config.create_app
 app = create_app()
 
 
