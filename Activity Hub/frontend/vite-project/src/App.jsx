@@ -7,10 +7,11 @@ import UpdateEvent from "./Components/UpdateEvent";
 import EventForm from "./Components/CommonButton/EventForm";
 import Grid from "@mui/material/Unstable_Grid2";
 import NewUserModal from "./Components/Modals/NewUserModal";
+import { SharedProvider } from "./Components/SharedContext";
 
 function App() {
   return (
-    <>
+    <SharedProvider>
       <div>
         <NavBar />
         <Grid sx={{ padding: 5, paddingRight: 2 }}>
@@ -27,7 +28,7 @@ function App() {
           </Routes>
         </Grid>
       </div>
-    </>
+    </SharedProvider>
   );
 }
 

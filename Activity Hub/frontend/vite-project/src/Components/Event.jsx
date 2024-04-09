@@ -94,7 +94,6 @@ function Event(events) {
             color="primary"
             onClick={handleInterestClick}
           >
-            {/* <NavigationIcon sx={{ mr: 0 }} /> */}
             RSVP
           </Fab>
         </div>

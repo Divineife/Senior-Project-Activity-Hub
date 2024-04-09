@@ -1,34 +1,12 @@
-import os
-from flask import Flask, jsonify, request, session, redirect, url_for
-from flask_cors import CORS, cross_origin
+from flask import jsonify, request, session
+from flask_cors import cross_origin
 from . import db
 from . import img
 from . import event_utils
 from . import mapBox
+from . config import create_app
 
-from flask_session import Session
-from flask_login import LoginManager
-
-app = Flask(__name__)
-
-secret_key = os.environ.get("SECRET_KEY")
-app.secret_key = secret_key
-
-app.config["SECRET_KEY"] = secret_key
-app.config["SESSION_TYPE"] = "filesystem"
-app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-app.config["SESSION_COOKIE_SAMESITE"] = "None"
-app.config["SESSION_COOKIE_SECURE"] = True
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_USE_SIGNER"] = True
-app.config["SESSION_COOKIE_NAME"] = "your_desired_cookie_name"
-
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-Session(app)
-CORS(app, supports_credentials=True)
+app = create_app()
 
 
 @app.route("/")
