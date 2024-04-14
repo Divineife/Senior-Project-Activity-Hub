@@ -9,6 +9,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import NewUserModal from "./Components/Modals/NewUserModal";
 import { NavBarContext } from "./Components/context";
 import NavBarProvider from "./Components/NavBarProvider";
+import UserProfile from "./Components/Profile";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/events/new" element={<EventForm />}></Route>
           <Route path="/user/signUp" element={<NewUserModal />}></Route>
           <Route path="/editEvent/:event_id" element={<UpdateEvent />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route
             path="/user/signIn"
             element={<NewUserModal open={true} />}

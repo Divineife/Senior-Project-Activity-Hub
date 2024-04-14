@@ -82,15 +82,15 @@ function Event({ event, userInfo }) {
         <Typography gutterBottom variant="h5" component="div">
           {event.eventName}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        {/* <Typography variant="body2" color="text.secondary">
           {event.eventDescription}
-        </Typography>
+        </Typography> */}
         <Typography
           variant="body2"
           color="text.secondary"
           style={{ marginTop: 8 }}
         >
-          Location: {event.eventLocation}
+          {event.eventLocation}
         </Typography>
         <Typography variant="body2" style={{ marginTop: 8 }}>
           {interestCount} Going

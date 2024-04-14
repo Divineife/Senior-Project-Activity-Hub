@@ -69,7 +69,6 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
-  // const [userInSession, setUserInSession] = useState(false);
   const { userInSession, setUserInSession } = useContext(NavBarContext);
   const [userName, setUserName] = useState(null);
 
@@ -144,8 +143,14 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          navigate("/profile");
+        }}
+      >
+        Profile
+      </MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
     </Menu>
   );
 
@@ -186,7 +191,11 @@ export default function NavBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem
+        onClick={() => {
+          navigate("/profile");
+        }}
+      >
         <IconButton
           size="large"
           aria-label="account of current user"
