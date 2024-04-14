@@ -21,3 +21,9 @@ Divergent branch
 
 formatting setup with prettier
     |- npm run format
+
+Exiting vim
+    |- press i to write
+    |- press ctrl + c
+    |- type ":wq" to save 
+    |- press enter
