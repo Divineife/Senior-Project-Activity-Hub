@@ -9,12 +9,14 @@ import { useState, useEffect, useContext } from "react";
 import { NavBarContext } from "./context";
 import Fab from "@mui/material/Fab";
 
-function Event(events) {
-  const { event } = events;
+function Event({event, userInfo}) {
+  console.log(event.rsvpUsers, userInfo["user_id"])
+
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
-  const [interestCount, setInterestCount] = useState(10);
-  const [hasIndicatedInterest, setHasIndicatedInterest] = useState(false);
+  const [interestCount, setInterestCount] = useState(event.rsvpUsers?.length || 0);
+  const [isRSVPd, setIsRSVPd] = useState(event?.rsvpUsers ? event.rsvpUsers.includes(userInfo["user_id"]) : false);
+
   const { userInSession, setUserInSession } = useContext(NavBarContext);
 
   const handleLearnMore = (eventId) => {
@@ -48,13 +50,25 @@ function Event(events) {
   }, []);
 
   const handleInterestClick = () => {
-    if (!hasIndicatedInterest) {
+    if (!isRSVPd) {
       setInterestCount(interestCount + 1);
-      setHasIndicatedInterest(true);
+      setIsRSVPd(true);
     } else {
       setInterestCount(interestCount - 1);
-      setHasIndicatedInterest(false);
+      setIsRSVPd(false);
     }
+    fetch(`http://localhost:3000/events/${event._id}/rsvp`, {
+      method: isRSVPd ? 'DELETE' : 'POST', // Use POST for adding, DELETE for removing
+      credentials: "include", // Include session cookies
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("RSVP updated successfully");
+        } else {
+          console.error("Error updating RSVP:", response.statusText);
+          // Handle errors, potentially revert local state changes
+        }
+      });
   };
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
@@ -98,7 +112,6 @@ function Event(events) {
             color="primary"
             onClick={handleInterestClick}
           >
-            {/* <NavigationIcon sx={{ mr: 0 }} /> */}
             RSVP
           </Fab>
         </div>

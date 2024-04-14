@@ -14,7 +14,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { NavBarContext } from "./context";
 
 function Copyright(props) {
   return (
@@ -42,7 +41,6 @@ export default function SignIn({
   setUserInSession,
   setUserInfo,
 }) {
-  // const { userInSession, setUserInSession } = useContext(NavBarContext);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -57,7 +55,7 @@ export default function SignIn({
         email,
         password,
       });
-      console.log("Login Success", response.status);
+      console.log("Login Success", response.status, response.data.user_id);
       setSignUpSuccess(false);
       setUserInSession(true);
       setUserInfo(response.data.user);
