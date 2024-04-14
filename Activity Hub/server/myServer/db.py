@@ -53,6 +53,7 @@ def get_img_by_id(img_id):
 
 def get_event_by_id(event_id):
     # Connect to the database and retrieve the event from the collection
+    print("GOT", event_id)
     event = event_instance.find_one({"_id": ObjectId(event_id)})
 
     return event
