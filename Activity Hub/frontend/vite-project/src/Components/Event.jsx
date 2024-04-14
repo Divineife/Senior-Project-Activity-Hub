@@ -67,7 +67,9 @@ function Event(events) {
           {event.eventName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {event.eventDescription}
+          {event.eventDescription && event.eventDescription.length > 100
+            ? `${event.eventDescription.substring(0, 100)}...`
+            : event.eventDescription}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {event.eventLocation}

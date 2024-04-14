@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
-import Visibility from "../Components/CommonButton/Visibility";
+import Visibility from "./CommonButton/Visibility";
 import CardMedia from "@mui/material/CardMedia";
 import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";

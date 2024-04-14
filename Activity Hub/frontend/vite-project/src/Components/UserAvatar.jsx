@@ -36,6 +36,11 @@ function stringAvatar(name) {
 }
 
 export default function UserAvatar({ user }) {
+  if (!user) {
+    return null;
+  }
+  
+
   const { fName, lName } = user;
   const fullName =
     capitalizeFirstLetter(fName) + " " + capitalizeFirstLetter(lName);
@@ -46,3 +51,4 @@ export default function UserAvatar({ user }) {
     </Stack>
   );
 }
+
