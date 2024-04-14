@@ -110,9 +110,9 @@ export default function NavBar() {
         credentials: "include",
       });
       console.log("Logged out with", response.status);
-      if(response.ok){
+      if (response.ok) {
         setUserInSession(false);
-      }else{
+      } else {
         console.error("Log Out Failed:", response.statusText);
       }
     } catch (error) {

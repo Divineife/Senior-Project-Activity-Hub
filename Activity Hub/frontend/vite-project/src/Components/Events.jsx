@@ -5,27 +5,45 @@ import "../Styles/Events.css";
 import Grid from "@mui/material/Unstable_Grid2";
 import { NavBarContext } from "./context";
 
-
 function Events() {
   const [events, setEvents] = useState([]);
   const { userInSession } = useContext(NavBarContext);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/events", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
+    const fetchData = async () => {
+      try {
+        // Fetch user session info and events (separate requests preferred)
+        const userSessionResponse = await fetch(
+          "http://localhost:3000/user_sess",
+          {
+            credentials: "include", // Include session cookies
+          },
+        );
+        const eventsResponse = await fetch("http://localhost:3000/events", {
+          credentials: "include", // Include session cookies (if event data depends on user)
+        });
+
+        if (!userSessionResponse.ok || !eventsResponse.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then((data) => {
-        setEvents(data);
-      })
-      .catch((error) => console.error("Error fetching events:", error));
-  }, [userInSession]);
 
+        const userSessionData = await userSessionResponse.json();
+        const eventsData = await eventsResponse.json();
+
+        setUserId(userSessionData);
+        setEvents(eventsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle errors appropriately, potentially set states to default values
+      }
+    };
+
+    if (userInSession) {
+      // Fetch data only if user is in session
+      fetchData();
+    }
+  }, [userInSession]);
   return (
     <Grid
       container
@@ -36,14 +54,16 @@ function Events() {
       {events.map((event, index) => (
         <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
           <Event
-          key={index}
-          event={{
-            ...event,
-            eventDescription: event.eventDescription && event.eventDescription.length > 100
-              ? `${event.eventDescription.substring(0, 100)}...`
-              : event.eventDescription,
-          }}
-        />
+            key={index}
+            event={{
+              ...event,
+              eventDescription:
+                event.eventDescription && event.eventDescription.length > 100
+                  ? `${event.eventDescription.substring(0, 100)}...`
+                  : event.eventDescription,
+            }}
+            userInfo={userId}
+          />
         </Grid>
       ))}
     </Grid>

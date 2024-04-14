@@ -67,6 +67,7 @@ def add_event():
     data["eventLocation"] = request.form.get("eventLocation")
     data["selectedVisibility"] = request.form.get("selectedVisibility")
     data["author"] = id
+    data["rsvpUsers"] = []
     eventLocation = request.form.get("eventLocation")
     geolocation = mapBox.geocode(eventLocation)
     data["geometry"] = geolocation["features"][0]["geometry"]["coordinates"]
@@ -176,7 +177,12 @@ def signup():
     # Check if user creation was successful
     if user_id:
         session["user_id"] = user_id
-        return jsonify(message="User registered successfully", user=user_name), 201
+        return (
+            jsonify(
+                message="User registered successfully", user_id=user_id, user=user_name
+            ),
+            201,
+        )
     else:
         return jsonify(error="Failed to create user"), 500
 
@@ -199,7 +205,7 @@ def login():
     user_name = {"fName": user["first_name"], "lName": user["last_name"]}
 
     session["user_id"] = str(user["_id"])
-    return jsonify(message=session.get("user_id"), user=user_name), 200
+    return jsonify(user_id=session.get("user_id"), user=user_name), 200
 
 
 @app.route("/logout", methods=["POST"])
@@ -231,6 +237,23 @@ def check_author(author):
     if author == session["user_id"]:
         return jsonify({"result": True})
     return jsonify({"result": False})
+
+
+@app.route("/events/<event_id>/rsvp", methods=["POST", "DELETE"])
+def update_rsvp(event_id):
+    print("HERE")
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"message": "Unauthorized"}), 401
+
+    if request.method == "POST":
+        rsvp_list = db.get_event_by_id(event_id).get("rsvpUsers")
+        if not rsvp_list or user_id not in rsvp_list:
+            db.rsvp(event_id, user_id)
+    else:
+        db.unrsvp(event_id, user_id)
+
+    return jsonify({"messsage": "RSVP updated successfully"})
 
 
 def validate_owner(user_id):

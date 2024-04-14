@@ -74,6 +74,12 @@ def update_event(event_id, data):
     result = event_instance.update_one({"_id": ObjectId(event_id)}, {"$set": data})
     return result.modified_count
 
+def rsvp(event_id, user_id):
+    event_instance.update_one({"_id": ObjectId(event_id)}, {"$push": {"rsvpUsers": user_id}})
+
+def unrsvp(event_id, user_id):
+    print("GOT TO DB")
+    event_instance.update_one({"_id": ObjectId(event_id)}, {"$pull": {"rsvpUsers": user_id}})
 
 def event_exists(event_id):
     event_count = event_instance.count_documents({"_id": ObjectId(event_id)})
