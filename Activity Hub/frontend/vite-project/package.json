@@ -15,12 +15,14 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
+    "@mui/x-charts": "^7.2.0",
     "axios": "^1.6.7",
     "mapbox-gl": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.1.7",
-    "react-router-dom": "^6.22.1"
+    "react-router-dom": "^6.22.1",
+    "react-window": "^1.8.10"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

@@ -7,6 +7,8 @@ import {
   CardHeader,
   Typography,
 } from "@mui/material";
+import EventAccordions from "./EventAccordions";
+import EventChart from "./EventChart";
 
 function UserProfile() {
   const { userInSession } = useContext(NavBarContext);
@@ -40,7 +42,6 @@ function UserProfile() {
 
     fetchUserInfo();
   }, []);
-  console.log("USER", user);
 
   if (isLoading) {
     return <p>Loading profile...</p>;
@@ -57,28 +58,33 @@ function UserProfile() {
   const numEvents = events.length;
 
   return (
-    <Card>
-      <CardHeader
-        avatar={
-          <Avatar
-            alt={first_name}
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfjhH9JE8PzTw1bAo66ZaAa9JVbj8gCfB2QA&s"
-          />
-        }
-        title={first_name + " " + last_name}
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          Email: {email}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          School: {school}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Events Posted: {numEvents}
-        </Typography>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader
+          avatar={
+            <Avatar
+              alt={first_name}
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfjhH9JE8PzTw1bAo66ZaAa9JVbj8gCfB2QA&s"
+            />
+          }
+          title={first_name + " " + last_name}
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            Email: {email}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            School: {school}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Events Posted: {numEvents}
+          </Typography>
+        </CardContent>
+      </Card>
+      <EventChart />
+      <Typography> YOUR EVENTS</Typography>
+      <EventAccordions events={events} />
+    </>
   );
 }
 
