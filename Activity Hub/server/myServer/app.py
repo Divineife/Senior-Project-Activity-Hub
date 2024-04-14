@@ -115,7 +115,6 @@ def edit_event(event_id):
     if document_count < 1:
         return jsonify({"err Message": "Failed to update collection"}), 500
 
-    print("DATA", data)
     return jsonify({"success": True}), 200
 
 
@@ -222,6 +221,17 @@ def user():
     else:
         return jsonify({"user_in_session": False})
 
+@app.route("/user")
+@cross_origin(supports_credentials=True)
+def getUser():
+    user_id = session.get("user_id")
+    user = db.get_user_by_id(user_id)
+    user["_id"] = str(user["_id"])
+    events = []
+    for event in user["events"]:
+        events.append( str(event))
+    user["events"] = events
+    return jsonify({"user" : user}), 200
 
 @app.route("/user/validate")
 @cross_origin(supports_credentials=True)
@@ -241,7 +251,6 @@ def check_author(author):
 
 @app.route("/events/<event_id>/rsvp", methods=["POST", "DELETE"])
 def update_rsvp(event_id):
-    print("HERE")
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"message": "Unauthorized"}), 401
