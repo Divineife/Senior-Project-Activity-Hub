@@ -7,11 +7,12 @@ import UpdateEvent from "./Components/UpdateEvent";
 import EventForm from "./Components/CommonButton/EventForm";
 import Grid from "@mui/material/Unstable_Grid2";
 import NewUserModal from "./Components/Modals/NewUserModal";
+import { NavBarContext } from "./Components/context";
+import NavBarProvider from "./Components/NavBarProvider";
 
 function App() {
   return (
-    <>
-      <div>
+    <NavBarProvider>
         <NavBar />
         <Grid sx={{ padding: 5, paddingRight: 2 }}>
           <Routes>
@@ -26,8 +27,7 @@ function App() {
             ></Route>
           </Routes>
         </Grid>
-      </div>
-    </>
+    </NavBarProvider>
   );
 }
 

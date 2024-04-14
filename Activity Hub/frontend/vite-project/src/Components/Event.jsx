@@ -5,7 +5,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { NavBarContext } from "./context";
 import Fab from "@mui/material/Fab";
 
 function Event(events) {
@@ -14,6 +15,8 @@ function Event(events) {
   const [imgUrl, setImgUrl] = useState(false);
   const [interestCount, setInterestCount] = useState(10);
   const [hasIndicatedInterest, setHasIndicatedInterest] = useState(false);
+  const { userInSession, setUserInSession } = useContext(NavBarContext);
+  console.log("USER IN SESSION", userInSession)
 
   const handleLearnMore = (eventId) => {
     try {
@@ -54,7 +57,6 @@ function Event(events) {
       setHasIndicatedInterest(false);
     }
   };
-
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -69,18 +71,21 @@ function Event(events) {
         <Typography variant="body2" color="text.secondary">
           {event.eventDescription}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {event.eventLocation}
+        <Typography variant="body2" color="text.secondary" style={{ marginTop: 8 }}>
+          Location: {event.eventLocation}
         </Typography>
-        <Typography variant="body2" style={{ marginRight: "10px" }}>
+        <Typography variant="body2" style={{ marginTop: 8 }}>
           {interestCount} Going
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
+      <Button size="small" onClick={() => setClicked(true)}>
+        Share
+      </Button>
         <Button size="small" onClick={() => handleLearnMore(event._id)}>
           Learn More
         </Button>
+        {userInSession && (
         <div
           style={{
             display: "flex",
@@ -98,6 +103,7 @@ function Event(events) {
             RSVP
           </Fab>
         </div>
+      )}
       </CardActions>
     </Paper>
   );
