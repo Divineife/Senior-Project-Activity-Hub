@@ -16,7 +16,6 @@ function Event(events) {
   const [interestCount, setInterestCount] = useState(10);
   const [hasIndicatedInterest, setHasIndicatedInterest] = useState(false);
   const { userInSession, setUserInSession } = useContext(NavBarContext);
-  console.log("USER IN SESSION", userInSession)
 
   const handleLearnMore = (eventId) => {
     try {
