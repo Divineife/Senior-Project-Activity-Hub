@@ -9,13 +9,15 @@ import { useState, useEffect, useContext } from "react";
 import { NavBarContext } from "./context";
 import Fab from "@mui/material/Fab";
 
-function Event({event, userInfo}) {
-  console.log(event.rsvpUsers, userInfo["user_id"])
-
+function Event({ event, userInfo }) {
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
-  const [interestCount, setInterestCount] = useState(event.rsvpUsers?.length || 0);
-  const [isRSVPd, setIsRSVPd] = useState(event?.rsvpUsers ? event.rsvpUsers.includes(userInfo["user_id"]) : false);
+  const [interestCount, setInterestCount] = useState(
+    event.rsvpUsers?.length || 0,
+  );
+  const [isRSVPd, setIsRSVPd] = useState(
+    event?.rsvpUsers ? event.rsvpUsers.includes(userInfo["user_id"]) : false,
+  );
 
   const { userInSession, setUserInSession } = useContext(NavBarContext);
 
@@ -25,7 +27,7 @@ function Event({event, userInfo}) {
         credentials: "include",
       })
         .then((res) => {
-          return res.text(); // Extract the response body as text
+          return res.text();
         })
         .then((result) => {
           if (result === "True") {
@@ -58,17 +60,16 @@ function Event({event, userInfo}) {
       setIsRSVPd(false);
     }
     fetch(`http://localhost:3000/events/${event._id}/rsvp`, {
-      method: isRSVPd ? 'DELETE' : 'POST', // Use POST for adding, DELETE for removing
+      method: isRSVPd ? "DELETE" : "POST", // Use POST for adding, DELETE for removing
       credentials: "include", // Include session cookies
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("RSVP updated successfully");
-        } else {
-          console.error("Error updating RSVP:", response.statusText);
-          // Handle errors, potentially revert local state changes
-        }
-      });
+    }).then((response) => {
+      if (response.ok) {
+        console.log("RSVP updated successfully");
+      } else {
+        console.error("Error updating RSVP:", response.statusText);
+        // Handle errors, potentially revert local state changes
+      }
+    });
   };
   return (
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
@@ -84,7 +85,11 @@ function Event({event, userInfo}) {
         <Typography variant="body2" color="text.secondary">
           {event.eventDescription}
         </Typography>
-        <Typography variant="body2" color="text.secondary" style={{ marginTop: 8 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={{ marginTop: 8 }}
+        >
           Location: {event.eventLocation}
         </Typography>
         <Typography variant="body2" style={{ marginTop: 8 }}>
@@ -92,30 +97,30 @@ function Event({event, userInfo}) {
         </Typography>
       </CardContent>
       <CardActions>
-      <Button size="small" onClick={() => setClicked(true)}>
-        Share
-      </Button>
+        <Button size="small" onClick={() => setClicked(true)}>
+          Share
+        </Button>
         <Button size="small" onClick={() => handleLearnMore(event._id)}>
           Learn More
         </Button>
         {userInSession && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "8px",
-          }}
-        >
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            onClick={handleInterestClick}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "8px",
+            }}
           >
-            RSVP
-          </Fab>
-        </div>
-      )}
+            <Fab
+              variant="extended"
+              size="small"
+              color="primary"
+              onClick={handleInterestClick}
+            >
+              RSVP
+            </Fab>
+          </div>
+        )}
       </CardActions>
     </Paper>
   );

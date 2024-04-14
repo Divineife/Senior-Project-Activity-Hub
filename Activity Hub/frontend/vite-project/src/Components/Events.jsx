@@ -5,7 +5,6 @@ import "../Styles/Events.css";
 import Grid from "@mui/material/Unstable_Grid2";
 import { NavBarContext } from "./context";
 
-
 function Events() {
   const [events, setEvents] = useState([]);
   const { userInSession } = useContext(NavBarContext);
@@ -15,9 +14,12 @@ function Events() {
     const fetchData = async () => {
       try {
         // Fetch user session info and events (separate requests preferred)
-        const userSessionResponse = await fetch("http://localhost:3000/user_sess", {
-          credentials: "include", // Include session cookies
-        });
+        const userSessionResponse = await fetch(
+          "http://localhost:3000/user_sess",
+          {
+            credentials: "include", // Include session cookies
+          },
+        );
         const eventsResponse = await fetch("http://localhost:3000/events", {
           credentials: "include", // Include session cookies (if event data depends on user)
         });
@@ -37,12 +39,12 @@ function Events() {
       }
     };
 
-    if (userInSession) { // Fetch data only if user is in session
+    if (userInSession) {
+      // Fetch data only if user is in session
       fetchData();
     }
   }, [userInSession]);
   return (
-    
     <Grid
       container
       spacing={3}
@@ -52,15 +54,16 @@ function Events() {
       {events.map((event, index) => (
         <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
           <Event
-          key={index}
-          event={{
-            ...event,
-            eventDescription: event.eventDescription && event.eventDescription.length > 100
-              ? `${event.eventDescription.substring(0, 100)}...`
-              : event.eventDescription,
-          }}
-          userInfo = {userId}
-        />
+            key={index}
+            event={{
+              ...event,
+              eventDescription:
+                event.eventDescription && event.eventDescription.length > 100
+                  ? `${event.eventDescription.substring(0, 100)}...`
+                  : event.eventDescription,
+            }}
+            userInfo={userId}
+          />
         </Grid>
       ))}
     </Grid>

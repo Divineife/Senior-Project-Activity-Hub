@@ -13,20 +13,20 @@ import NavBarProvider from "./Components/NavBarProvider";
 function App() {
   return (
     <NavBarProvider>
-        <NavBar />
-        <Grid sx={{ padding: 5, paddingRight: 2 }}>
-          <Routes>
-            <Route index element={<Events />} />
-            <Route path="/eventDetails/:id" element={<EventDetails />} />
-            <Route path="/events/new" element={<EventForm />}></Route>
-            <Route path="/user/signUp" element={<NewUserModal />}></Route>
-            <Route path="/editEvent/:event_id" element={<UpdateEvent />} />
-            <Route
-              path="/user/signIn"
-              element={<NewUserModal open={true} />}
-            ></Route>
-          </Routes>
-        </Grid>
+      <NavBar />
+      <Grid sx={{ padding: 5, paddingRight: 2 }}>
+        <Routes>
+          <Route index element={<Events />} />
+          <Route path="/eventDetails/:id" element={<EventDetails />} />
+          <Route path="/events/new" element={<EventForm />}></Route>
+          <Route path="/user/signUp" element={<NewUserModal />}></Route>
+          <Route path="/editEvent/:event_id" element={<UpdateEvent />} />
+          <Route
+            path="/user/signIn"
+            element={<NewUserModal open={true} />}
+          ></Route>
+        </Routes>
+      </Grid>
     </NavBarProvider>
   );
 }
