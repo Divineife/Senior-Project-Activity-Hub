@@ -1,12 +1,14 @@
 /* eslint-disable react/jsx-key */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Event from "./Event";
 import "../Styles/Events.css";
-// import { Grid } from "@mui/material/";
 import Grid from "@mui/material/Unstable_Grid2";
+import { NavBarContext } from "./context";
+
 
 function Events() {
   const [events, setEvents] = useState([]);
+  const { userInSession } = useContext(NavBarContext);
 
   useEffect(() => {
     fetch("http://localhost:3000/events", {
@@ -22,7 +24,7 @@ function Events() {
         setEvents(data);
       })
       .catch((error) => console.error("Error fetching events:", error));
-  }, []);
+  }, [userInSession]);
 
   return (
     <Grid
@@ -33,7 +35,15 @@ function Events() {
     >
       {events.map((event, index) => (
         <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
-          <Event key={index} event={event} />
+          <Event
+          key={index}
+          event={{
+            ...event,
+            eventDescription: event.eventDescription && event.eventDescription.length > 100
+              ? `${event.eventDescription.substring(0, 100)}...`
+              : event.eventDescription,
+          }}
+        />
         </Grid>
       ))}
     </Grid>

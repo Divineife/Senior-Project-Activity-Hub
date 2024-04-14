@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { NavBarContext } from "./context";
 
 function Copyright(props) {
   return (
@@ -41,6 +42,7 @@ export default function SignIn({
   setUserInSession,
   setUserInfo,
 }) {
+  // const { userInSession, setUserInSession } = useContext(NavBarContext);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 

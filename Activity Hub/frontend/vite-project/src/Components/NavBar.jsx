@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,7 +9,6 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -17,6 +16,7 @@ import Button from "@mui/material/Button";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import NewUserModal from "./Modals/NewUserModal";
 import UserAvatar from "./userAvatar";
+import { NavBarContext } from "./context";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -69,7 +69,8 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [signUpSuccess, setSignUpSuccess] = useState(true);
-  const [userInSession, setUserInSession] = useState(false);
+  // const [userInSession, setUserInSession] = useState(false);
+  const { userInSession, setUserInSession } = useContext(NavBarContext);
   const [userName, setUserName] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -109,6 +110,11 @@ export default function NavBar() {
         credentials: "include",
       });
       console.log("Logged out with", response.status);
+      if(response.ok){
+        setUserInSession(false);
+      }else{
+        console.error("Log Out Failed:", response.statusText);
+      }
     } catch (error) {
       console.log(error);
     }
