@@ -9,7 +9,8 @@ import { useState, useEffect, useContext } from "react";
 import { NavBarContext } from "./context";
 import Fab from "@mui/material/Fab";
 
-function Event({ event, userInfo }) {
+
+function Event({ event, userInfo, setShowAlert }) {
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
   const [interestCount, setInterestCount] = useState(
@@ -18,6 +19,7 @@ function Event({ event, userInfo }) {
   const [isRSVPd, setIsRSVPd] = useState(
     event?.rsvpUsers ? event.rsvpUsers.includes(userInfo["user_id"]) : false,
   );
+  
 
   const { userInSession, setUserInSession } = useContext(NavBarContext);
 
@@ -32,6 +34,8 @@ function Event({ event, userInfo }) {
         .then((result) => {
           if (result === "True") {
             navigate(`/eventDetails/${eventId}`);
+          }else{
+            setShowAlert(true)
           }
         });
     } catch (e) {
@@ -72,6 +76,7 @@ function Event({ event, userInfo }) {
     });
   };
   return (
+    <>
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
@@ -97,7 +102,7 @@ function Event({ event, userInfo }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => setClicked(true)}>
+        <Button size="small">
           Share
         </Button>
         <Button size="small" onClick={() => handleLearnMore(event._id)}>
@@ -123,6 +128,7 @@ function Event({ event, userInfo }) {
         )}
       </CardActions>
     </Paper>
+    </>
   );
 }
 

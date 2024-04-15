@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import EventGuests from "./EventGuests";
 
 export default function EventProfile({ eventDetails }) {
-  console.log(eventDetails)
   return (
     <Card variant="outlined" sx={{ maxWidth: 360 }}>
       <Box sx={{ p: 2 }}>
