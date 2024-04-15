@@ -35,6 +35,7 @@ function Events() {
 
         setUserId(userSessionData);
         setEvents(eventsData);
+        setShowAlert(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
