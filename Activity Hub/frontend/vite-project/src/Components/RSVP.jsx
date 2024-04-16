@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
-import { useState, useEffect, useContext } from "react";
+import { useState} from "react";
+import Alert from '@mui/material/Alert';
 
 export default function RSVP({eventInfo, userInfo, setInterestCount, interestCount}) {
   const [anchor, setAnchor] = React.useState(null);
@@ -46,7 +47,7 @@ export default function RSVP({eventInfo, userInfo, setInterestCount, interestCou
          RSVP
       </Button>
       <BasePopup id={id} open={open} anchor={anchor}>
-        <PopupBody>{message}</PopupBody>
+        <Alert severity="success">{message}</Alert>
       </BasePopup>
     </div>
   );
