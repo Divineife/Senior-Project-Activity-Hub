@@ -4,11 +4,13 @@ import Event from "./Event";
 import "../Styles/Events.css";
 import Grid from "@mui/material/Unstable_Grid2";
 import { NavBarContext } from "./context";
+import Alert from '@mui/material/Alert';
 
 function Events() {
   const [events, setEvents] = useState([]);
   const { userInSession } = useContext(NavBarContext);
   const [userId, setUserId] = useState(null);
+  const [signInAlert, setSignInAlert] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,18 +35,21 @@ function Events() {
 
         setUserId(userSessionData);
         setEvents(eventsData);
+        setSignInAlert(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle errors appropriately, potentially set states to default values
       }
     };
-
-    if (userInSession) {
-      // Fetch data only if user is in session
       fetchData();
-    }
+
   }, [userInSession]);
   return (
+    <>
+    {signInAlert && (
+        <Alert variant="filled" severity="warning" style={{ margin: "0px 12px 10px 0px" }}>
+          Please Sign Up or Sign In To view more Information
+        </Alert>
+      )}
     <Grid
       container
       spacing={3}
@@ -63,10 +68,13 @@ function Events() {
                   : event.eventDescription,
             }}
             userInfo={userId}
+            setShowAlert={setSignInAlert}
           />
         </Grid>
       ))}
     </Grid>
+    </>
+    
   );
 }
 
