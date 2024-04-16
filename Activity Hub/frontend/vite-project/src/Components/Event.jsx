@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { NavBarContext } from "./context";
-import Fab from "@mui/material/Fab";
+import RSVP from "./RSVP";
 
 
 function Event({ event, userInfo, setShowAlert }) {
@@ -16,11 +16,8 @@ function Event({ event, userInfo, setShowAlert }) {
   const [interestCount, setInterestCount] = useState(
     event.rsvpUsers?.length || 0,
   );
-  const [isRSVPd, setIsRSVPd] = useState(
-    event?.rsvpUsers ? event.rsvpUsers.includes(userInfo["user_id"]) : false,
-  );
   
-
+  // setUserInSession passed as prop to RSVP
   const { userInSession, setUserInSession } = useContext(NavBarContext);
 
   const handleLearnMore = (eventId) => {
@@ -55,26 +52,6 @@ function Event({ event, userInfo, setShowAlert }) {
       });
   }, []);
 
-  const handleInterestClick = () => {
-    if (!isRSVPd) {
-      setInterestCount(interestCount + 1);
-      setIsRSVPd(true);
-    } else {
-      setInterestCount(interestCount - 1);
-      setIsRSVPd(false);
-    }
-    fetch(`http://localhost:3000/events/${event._id}/rsvp`, {
-      method: isRSVPd ? "DELETE" : "POST", // Use POST for adding, DELETE for removing
-      credentials: "include", // Include session cookies
-    }).then((response) => {
-      if (response.ok) {
-        console.log("RSVP updated successfully");
-      } else {
-        console.error("Error updating RSVP:", response.statusText);
-        // Handle errors, potentially revert local state changes
-      }
-    });
-  };
   return (
     <>
     <Paper elevation={15} sx={{ maxWidth: 345 }}>
@@ -87,9 +64,6 @@ function Event({ event, userInfo, setShowAlert }) {
         <Typography gutterBottom variant="h5" component="div">
           {event.eventName}
         </Typography>
-        {/* <Typography variant="body2" color="text.secondary">
-          {event.eventDescription}
-        </Typography> */}
         <Typography
           variant="body2"
           color="text.secondary"
@@ -114,16 +88,11 @@ function Event({ event, userInfo, setShowAlert }) {
               display: "flex",
               justifyContent: "flex-end",
               marginTop: "8px",
+              alignSelf: "right",
+              marginLeft: "40px"
             }}
           >
-            <Fab
-              variant="extended"
-              size="small"
-              color="primary"
-              onClick={handleInterestClick}
-            >
-              RSVP
-            </Fab>
+            <RSVP eventInfo={event} userInfo={userInfo} interestCount={interestCount} setInterestCount={setInterestCount}/>
           </div>
         )}
       </CardActions>

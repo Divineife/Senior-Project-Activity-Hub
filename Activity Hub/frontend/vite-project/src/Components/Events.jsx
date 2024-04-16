@@ -10,7 +10,7 @@ function Events() {
   const [events, setEvents] = useState([]);
   const { userInSession } = useContext(NavBarContext);
   const [userId, setUserId] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
+  const [signInAlert, setSignInAlert] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +35,7 @@ function Events() {
 
         setUserId(userSessionData);
         setEvents(eventsData);
-        setShowAlert(false);
+        setSignInAlert(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -45,9 +45,9 @@ function Events() {
   }, [userInSession]);
   return (
     <>
-    {showAlert && (
+    {signInAlert && (
         <Alert variant="filled" severity="warning" style={{ margin: "0px 12px 10px 0px" }}>
-          Please Sign Up or Sign In
+          Please Sign Up or Sign In To view more Information
         </Alert>
       )}
     <Grid
@@ -68,7 +68,7 @@ function Events() {
                   : event.eventDescription,
             }}
             userInfo={userId}
-            setShowAlert={setShowAlert}
+            setShowAlert={setSignInAlert}
           />
         </Grid>
       ))}
