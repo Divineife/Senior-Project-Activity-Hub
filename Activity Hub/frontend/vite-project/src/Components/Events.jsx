@@ -4,7 +4,7 @@ import Event from "./Event";
 import "../Styles/Events.css";
 import Grid from "@mui/material/Unstable_Grid2";
 import { NavBarContext } from "./context";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 function Events() {
   const [events, setEvents] = useState([]);
@@ -40,41 +40,44 @@ function Events() {
         console.error("Error fetching data:", error);
       }
     };
-      fetchData();
-
+    fetchData();
   }, [userInSession]);
   return (
     <>
-    {signInAlert && (
-        <Alert variant="filled" severity="warning" style={{ margin: "0px 12px 10px 0px" }}>
-          Please Sign Up or Sign In To view more Information
+      {signInAlert && (
+        <Alert
+          variant="filled"
+          severity="warning"
+          style={{ margin: "0px 12px 10px 0px" }}
+        >
+          Please Sign Up or Sign In to view more information on this event,
+          gracias
         </Alert>
       )}
-    <Grid
-      container
-      spacing={3}
-      rowSpacing={4}
-      sx={{ backgroundColor: "#edf3f9", width: "100%", height: "100%" }}
-    >
-      {events.map((event, index) => (
-        <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
-          <Event
-            key={index}
-            event={{
-              ...event,
-              eventDescription:
-                event.eventDescription && event.eventDescription.length > 100
-                  ? `${event.eventDescription.substring(0, 100)}...`
-                  : event.eventDescription,
-            }}
-            userInfo={userId}
-            setShowAlert={setSignInAlert}
-          />
-        </Grid>
-      ))}
-    </Grid>
+      <Grid
+        container
+        spacing={3}
+        rowSpacing={4}
+        sx={{ backgroundColor: "#edf3f9", width: "100%", height: "100%" }}
+      >
+        {events.map((event, index) => (
+          <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
+            <Event
+              key={index}
+              event={{
+                ...event,
+                eventDescription:
+                  event.eventDescription && event.eventDescription.length > 100
+                    ? `${event.eventDescription.substring(0, 100)}...`
+                    : event.eventDescription,
+              }}
+              userInfo={userId}
+              setShowAlert={setSignInAlert}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </>
-    
   );
 }
 

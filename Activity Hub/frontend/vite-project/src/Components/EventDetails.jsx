@@ -124,14 +124,25 @@ function EventDetails() {
       }}
     >
       <Paper elevation={4}>
-        <Stack direction="column" spacing={2}>
+        <Stack
+          direction="column"
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+        >
           <Chip
             sx={{ borderRadius: 0, backgroundColor: "#edf3f9", fontSize: 20 }}
             label="Details Page"
           />
+
           <CardMedia
             component="img"
-            sx={{ height: 200 }}
+            sx={{
+              width: 600,
+              height: 400,
+              marginTop: "30px",
+            }}
             image={imgUrl ? imgUrl : null}
           />
           <Typography gutterBottom variant="h5" component="div">
@@ -146,7 +157,14 @@ function EventDetails() {
       <div style={{ marginBottom: 20 }}></div>
 
       <Paper elevation={20}>
-        <MapBox eventDetails={eventDetails} />
+        {/* <MapBox eventDetails={eventDetails} /> */}
+        <MapBox 
+        eventDetails={eventDetails} 
+        sx={{
+            width: '300px',  // set your desired width
+            height: '300px'  // set your desired height
+        }}
+    />
       </Paper>
 
       <Paper

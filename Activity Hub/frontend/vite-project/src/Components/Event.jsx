@@ -9,14 +9,13 @@ import { useState, useEffect, useContext } from "react";
 import { NavBarContext } from "./context";
 import RSVP from "./RSVP";
 
-
 function Event({ event, userInfo, setShowAlert }) {
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
   const [interestCount, setInterestCount] = useState(
     event.rsvpUsers?.length || 0,
   );
-  
+
   // setUserInSession passed as prop to RSVP
   const { userInSession, setUserInSession } = useContext(NavBarContext);
 
@@ -31,8 +30,8 @@ function Event({ event, userInfo, setShowAlert }) {
         .then((result) => {
           if (result === "True") {
             navigate(`/eventDetails/${eventId}`);
-          }else{
-            setShowAlert(true)
+          } else {
+            setShowAlert(true);
           }
         });
     } catch (e) {
@@ -52,51 +51,64 @@ function Event({ event, userInfo, setShowAlert }) {
       });
   }, []);
 
+  const padEventName = (eventName) => {
+    console.log(eventName.length, 70 - eventName.length);
+    // return eventName +  ' '.repeat(70)
+    return eventName.padEnd(70 - eventName.length, "&nbsp");
+  };
+
+  const space = " ".repeat(70);
+
   return (
     <>
-    <Paper elevation={15} sx={{ maxWidth: 345 }}>
-      <CardMedia
-        component="img"
-        sx={{ height: 200 }}
-        image={imgUrl ? imgUrl : event.eventImage}
-      />
-      <CardContent padding={0}>
-        <Typography gutterBottom variant="h5" component="div">
-          {event.eventName}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          style={{ marginTop: 8 }}
-        >
-          {event.eventLocation}
-        </Typography>
-        <Typography variant="body2" style={{ marginTop: 8 }}>
-          {interestCount} Going
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">
-          Share
-        </Button>
-        <Button size="small" onClick={() => handleLearnMore(event._id)}>
-          Learn More
-        </Button>
-        {userInSession && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "8px",
-              alignSelf: "right",
-              marginLeft: "40px"
-            }}
+      <Paper elevation={15} sx={{ maxWidth: 500 }}>
+        <CardMedia
+          component="img"
+          sx={{ height: 300 }}
+          image={imgUrl ? imgUrl : event.eventImage}
+          // style={{width: "1px", height: "100px" }}
+        />
+        <CardContent padding={0}>
+          <Typography gutterBottom variant="h5" component="div">
+            {/* {padEventName(event.eventName)} */}
+            {event.eventName}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            style={{ marginTop: 8 }}
           >
-            <RSVP eventInfo={event} userInfo={userInfo} interestCount={interestCount} setInterestCount={setInterestCount}/>
-          </div>
-        )}
-      </CardActions>
-    </Paper>
+            {event.eventLocation}
+          </Typography>
+          <Typography variant="body2" style={{ marginTop: 8 }}>
+            {interestCount} Going
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Share</Button>
+          <Button size="small" onClick={() => handleLearnMore(event._id)}>
+            Learn More
+          </Button>
+          {userInSession && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "8px",
+                alignSelf: "right",
+                marginLeft: "40px",
+              }}
+            >
+              <RSVP
+                eventInfo={event}
+                userInfo={userInfo}
+                interestCount={interestCount}
+                setInterestCount={setInterestCount}
+              />
+            </div>
+          )}
+        </CardActions>
+      </Paper>
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function EventProfile({ eventDetails }) {
       <Box sx={{ p: 2 }}>
         <Typography gutterBottom variant="body2">
           Who is coming?
-          <EventGuests eventGuests={eventDetails.rsvpUsers}/>
+          <EventGuests eventGuests={eventDetails.rsvpUsers} />
         </Typography>
         <Stack direction="row" spacing={1}>
           <Chip color="primary" label="Nashville" size="small" />
