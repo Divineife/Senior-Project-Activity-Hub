@@ -148,7 +148,12 @@ function EventDetails() {
           <Typography gutterBottom variant="h5" component="div">
             {eventDetails.eventName}
           </Typography>
-          <Typography gutterBottom variant="h9" component="div">
+          <Typography
+            gutterBottom
+            variant="h9"
+            component="div"
+            sx={{ padding: "20px" }}
+          >
             {eventDetails.eventDescription}
           </Typography>
         </Stack>
@@ -158,13 +163,7 @@ function EventDetails() {
 
       <Paper elevation={20}>
         {/* <MapBox eventDetails={eventDetails} /> */}
-        <MapBox 
-        eventDetails={eventDetails} 
-        sx={{
-            width: '300px',  // set your desired width
-            height: '300px'  // set your desired height
-        }}
-    />
+        <MapBox eventDetails={eventDetails} />
       </Paper>
 
       <Paper
@@ -180,7 +179,7 @@ function EventDetails() {
       >
         {isOwner && (
           <Button
-            size="large"
+            size="small"
             aria-haspopup="true"
             variant="contained"
             onClick={handleDeleteEvent}
@@ -192,7 +191,7 @@ function EventDetails() {
         <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
         {isOwner && (
           <Button
-            size="large"
+            size="small"
             aria-haspopup="true"
             variant="contained"
             onClick={handleEditEvent}

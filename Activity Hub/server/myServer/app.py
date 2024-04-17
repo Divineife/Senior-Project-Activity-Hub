@@ -177,9 +177,7 @@ def signup():
     if user_id:
         session["user_id"] = user_id
         return (
-            jsonify(
-                message="User registered successfully", user_id=user_id, user=user_name
-            ),
+            jsonify(message="User registered successfully", user=user_name),
             201,
         )
     else:
@@ -221,6 +219,7 @@ def user():
     else:
         return jsonify({"user_in_session": False})
 
+
 @app.route("/user")
 @cross_origin(supports_credentials=True)
 def getUser():
@@ -228,10 +227,12 @@ def getUser():
     user = db.get_user_by_id(user_id)
     user["_id"] = str(user["_id"])
     events = []
-    for event in user["events"]:
-        events.append( str(event))
+    if user.get("events"):
+        for event in user["events"]:
+            events.append(str(event))
     user["events"] = events
-    return jsonify({"user" : user}), 200
+    return jsonify({"user": user}), 200
+
 
 @app.route("/user/validate")
 @cross_origin(supports_credentials=True)

@@ -52,9 +52,7 @@ function Event({ event, userInfo, setShowAlert }) {
   }, []);
 
   const padEventName = (eventName) => {
-    console.log(eventName.length, 70 - eventName.length);
-    // return eventName +  ' '.repeat(70)
-    return eventName.padEnd(70 - eventName.length, "&nbsp");
+    return eventName + " ".repeat(70 - eventName.length);
   };
 
   const space = " ".repeat(70);
@@ -66,12 +64,22 @@ function Event({ event, userInfo, setShowAlert }) {
           component="img"
           sx={{ height: 300 }}
           image={imgUrl ? imgUrl : event.eventImage}
-          // style={{width: "1px", height: "100px" }}
         />
-        <CardContent padding={0}>
+        <CardContent
+          padding={0}
+          style={{ textAlign: "justify", width: "100%" }}
+        >
           <Typography gutterBottom variant="h5" component="div">
-            {/* {padEventName(event.eventName)} */}
-            {event.eventName}
+            <span
+              style={{
+                display: "inline-block",
+                width: "100%",
+                textAlign: "start",
+              }}
+            >
+              {padEventName(event.eventName)}
+              {/* <span>&nbsp;</span> */}
+            </span>
           </Typography>
           <Typography
             variant="body2"
