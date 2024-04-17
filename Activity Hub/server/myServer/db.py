@@ -78,13 +78,13 @@ def update_event(event_id, data):
 
 def rsvp(event_id, user_id):
     event_instance.update_one(
-        {"_id": ObjectId(event_id)}, {"$push": {"rsvpUsers": user_id}}
+        {"_id": ObjectId(event_id)}, {"$push": {"rsvpUsers": str(user_id)}}
     )
 
 
 def unrsvp(event_id, user_id):
     event_instance.update_one(
-        {"_id": ObjectId(event_id)}, {"$pull": {"rsvpUsers": user_id}}
+        {"_id": ObjectId(event_id)}, {"$pull": {"rsvpUsers": ObjectId(user_id)}}
     )
 
 

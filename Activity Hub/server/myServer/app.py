@@ -5,7 +5,7 @@ from . import db
 from . import img
 from . import event_utils
 from . import mapBox
-
+from bson import ObjectId
 from flask_session import Session
 from flask_login import LoginManager
 
@@ -39,7 +39,6 @@ def home():
 @app.route("/events", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    # print("SESHHHH", session)
     events = db.get_all_events()
     if session.get("user_id"):
         user = db.get_user_by_id(session["user_id"])
@@ -50,7 +49,6 @@ def get_all_events_route():
             event["eventImgId"] = str(event.get("eventImgId"))
             event["_id"] = str(event.get("_id"))
         user_events = events
-
     return jsonify(user_events), 200
 
 
@@ -177,7 +175,7 @@ def signup():
     if user_id:
         session["user_id"] = user_id
         return (
-            jsonify(message="User registered successfully", user=user_name),
+            jsonify(message="User registered successfully",user_id=user_id, user=user_name),
             201,
         )
     else:
