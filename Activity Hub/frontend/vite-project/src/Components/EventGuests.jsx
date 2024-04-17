@@ -7,8 +7,8 @@ import { FixedSizeList } from "react-window";
 
 function renderRow(props) {
   const { index, style, eventGuest } = props;
-
-  const guestName = eventGuest?.name || `Guest ${index + 1}`;
+  const guestInfo = `${eventGuest?.first_name} ${eventGuest?.last_name} from ${eventGuest?.school}`;
+  const guestName = guestInfo || `Guest ${index + 1}`;
 
   return (
     <ListItem style={style} key={index} component="div" disablePadding>

@@ -13,7 +13,7 @@ function Event({ event, userInfo, setShowAlert }) {
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState(false);
   const [interestCount, setInterestCount] = useState(
-    event.rsvpUsers?.length || 0,
+    event.rsvpUsers?.length || 0
   );
 
   // setUserInSession passed as prop to RSVP
@@ -50,7 +50,6 @@ function Event({ event, userInfo, setShowAlert }) {
         setImgUrl(res.result);
       });
   }, []);
-
   const padEventName = (eventName) => {
     return eventName + " ".repeat(70 - eventName.length);
   };
@@ -81,13 +80,20 @@ function Event({ event, userInfo, setShowAlert }) {
               {/* <span>&nbsp;</span> */}
             </span>
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            style={{ marginTop: 8 }}
-          >
-            {event.eventLocation}
-          </Typography>
+          {userInSession && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              style={{ marginTop: 8 }}
+            >
+              {event.eventLocation}
+            </Typography>
+          )}
+
+          {!userInSession && (
+            <Typography variant="body2" style={{ marginTop: 8 }}> Sign In to see location</Typography>
+          )}
+
           <Typography variant="body2" style={{ marginTop: 8 }}>
             {interestCount} Going
           </Typography>

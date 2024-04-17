@@ -139,15 +139,16 @@ function EventDetails() {
           <CardMedia
             component="img"
             sx={{
-              width: 600,
-              height: 400,
+              width: 450,
+              height: 500,
               marginTop: "30px",
             }}
             image={imgUrl ? imgUrl : null}
           />
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {eventDetails.eventName}
           </Typography>
+          <Typography variant="caption">{eventDetails.eventLocation}</Typography>
           <Typography
             gutterBottom
             variant="h9"

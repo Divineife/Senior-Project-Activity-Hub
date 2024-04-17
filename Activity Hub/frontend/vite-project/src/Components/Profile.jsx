@@ -12,7 +12,6 @@ import EventChart from "./EventChart";
 import Stack from "@mui/material/Stack";
 
 import DeleteAcc from "./DeleteAcc";
-import { alignProperty } from "@mui/material/styles/cssUtils";
 
 function UserProfile() {
   const { userInSession } = useContext(NavBarContext);

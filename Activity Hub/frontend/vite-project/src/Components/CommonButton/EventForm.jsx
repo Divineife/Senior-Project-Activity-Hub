@@ -43,7 +43,7 @@ const EventForm = () => {
         credentials: "include",
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
@@ -76,7 +76,6 @@ const EventForm = () => {
                 value={eventLocation}
                 onChange={(e) => {
                   setEventLocation(e.target.value);
-                  console.log("Data", eventImage);
                 }}
               ></Input>
             </FormControl>

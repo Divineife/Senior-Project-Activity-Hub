@@ -266,8 +266,23 @@ def update_rsvp(event_id):
 
 def validate_owner(user_id):
     res = db.get_user_by_id(user_id)
-    return res["_id"] == user_id
+    return res["_id"] == user_id\
 
+@app.route("/data/<id>", methods=["GET"])
+def get_data_by_id(id):
+    try:
+        # Fetch data from MongoDB based on ID
+        data = db.get_user_by_id(id)
+        del(data["_id"])
+        if data.get("events"):
+            del(data["events"])
+        if data:
+            return jsonify(data), 200  # Return data with status code 200 (OK)
+        else:
+            return jsonify({"message": "No data found for this ID"}), 404  # Return error message with status code 404 (Not Found)
 
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=3000, debug=True)
