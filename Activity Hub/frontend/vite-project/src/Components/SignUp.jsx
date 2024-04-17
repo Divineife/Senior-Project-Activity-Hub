@@ -70,7 +70,7 @@ export default function SignUp({
         },
       );
 
-      console.log("Sign Up Success", response.data);
+      // console.log("Sign Up Success", response.data);
       setSignUpSuccess(false);
       setUserInSession(true);
       setUserInfo(response.data.user);

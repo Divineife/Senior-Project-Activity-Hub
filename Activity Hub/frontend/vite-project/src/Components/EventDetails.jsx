@@ -124,20 +124,37 @@ function EventDetails() {
       }}
     >
       <Paper elevation={4}>
-        <Stack direction="column" spacing={2}>
+        <Stack
+          direction="column"
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+        >
           <Chip
             sx={{ borderRadius: 0, backgroundColor: "#edf3f9", fontSize: 20 }}
             label="Details Page"
           />
+
           <CardMedia
             component="img"
-            sx={{ height: 200 }}
+            sx={{
+              width: 450,
+              height: 500,
+              marginTop: "30px",
+            }}
             image={imgUrl ? imgUrl : null}
           />
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {eventDetails.eventName}
           </Typography>
-          <Typography gutterBottom variant="h9" component="div">
+          <Typography variant="caption">{eventDetails.eventLocation}</Typography>
+          <Typography
+            gutterBottom
+            variant="h9"
+            component="div"
+            sx={{ padding: "20px" }}
+          >
             {eventDetails.eventDescription}
           </Typography>
         </Stack>
@@ -146,6 +163,7 @@ function EventDetails() {
       <div style={{ marginBottom: 20 }}></div>
 
       <Paper elevation={20}>
+        {/* <MapBox eventDetails={eventDetails} /> */}
         <MapBox eventDetails={eventDetails} />
       </Paper>
 
@@ -162,7 +180,7 @@ function EventDetails() {
       >
         {isOwner && (
           <Button
-            size="large"
+            size="small"
             aria-haspopup="true"
             variant="contained"
             onClick={handleDeleteEvent}
@@ -174,7 +192,7 @@ function EventDetails() {
         <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
         {isOwner && (
           <Button
-            size="large"
+            size="small"
             aria-haspopup="true"
             variant="contained"
             onClick={handleEditEvent}

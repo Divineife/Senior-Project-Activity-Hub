@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import EventAccordions from "./EventAccordions";
 import EventChart from "./EventChart";
+import Stack from "@mui/material/Stack";
+
+import DeleteAcc from "./DeleteAcc";
 
 function UserProfile() {
   const { userInSession } = useContext(NavBarContext);
@@ -69,17 +72,22 @@ function UserProfile() {
           }
           title={first_name + " " + last_name}
         />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            Email: {email}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            School: {school}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Events Posted: {numEvents}
-          </Typography>
-        </CardContent>
+        <Stack direction="row" spacing={2}>
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Email: {email}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              School: {school}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Events Posted: {numEvents}
+            </Typography>
+          </CardContent>
+        </Stack>
+        <div>
+          <DeleteAcc />
+        </div>
       </Card>
       <EventChart />
       <Typography> YOUR EVENTS</Typography>

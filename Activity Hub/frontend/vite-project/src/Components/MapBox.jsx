@@ -49,11 +49,13 @@ function MapBox({ eventDetails }) {
 
   return (
     <>
-      <div className="sidebar">
-        Longitude: {viewport.long} | Latitude: {viewport.lat} | Zoom:{" "}
-        {viewport.zoom}
+      <div style={{ padding: "20px" }}>
+        <div className="sidebar">
+          Longitude: {viewport.long} | Latitude: {viewport.lat} | Zoom:{" "}
+          {viewport.zoom}
+        </div>
+        <div ref={mapContainerRef} className="map-container" />
       </div>
-      <div ref={mapContainerRef} className="map-container" />
     </>
   );
 }

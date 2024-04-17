@@ -5,7 +5,7 @@ from . import db
 from . import img
 from . import event_utils
 from . import mapBox
-
+from bson import ObjectId
 from flask_session import Session
 from flask_login import LoginManager
 
@@ -39,7 +39,6 @@ def home():
 @app.route("/events", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_all_events_route():
-    # print("SESHHHH", session)
     events = db.get_all_events()
     if session.get("user_id"):
         user = db.get_user_by_id(session["user_id"])
@@ -50,7 +49,6 @@ def get_all_events_route():
             event["eventImgId"] = str(event.get("eventImgId"))
             event["_id"] = str(event.get("_id"))
         user_events = events
-
     return jsonify(user_events), 200
 
 
@@ -177,9 +175,7 @@ def signup():
     if user_id:
         session["user_id"] = user_id
         return (
-            jsonify(
-                message="User registered successfully", user_id=user_id, user=user_name
-            ),
+            jsonify(message="User registered successfully",user_id=user_id, user=user_name),
             201,
         )
     else:
@@ -221,6 +217,7 @@ def user():
     else:
         return jsonify({"user_in_session": False})
 
+
 @app.route("/user")
 @cross_origin(supports_credentials=True)
 def getUser():
@@ -228,10 +225,12 @@ def getUser():
     user = db.get_user_by_id(user_id)
     user["_id"] = str(user["_id"])
     events = []
-    for event in user["events"]:
-        events.append( str(event))
+    if user.get("events"):
+        for event in user["events"]:
+            events.append(str(event))
     user["events"] = events
-    return jsonify({"user" : user}), 200
+    return jsonify({"user": user}), 200
+
 
 @app.route("/user/validate")
 @cross_origin(supports_credentials=True)
@@ -267,8 +266,23 @@ def update_rsvp(event_id):
 
 def validate_owner(user_id):
     res = db.get_user_by_id(user_id)
-    return res["_id"] == user_id
+    return res["_id"] == user_id\
 
+@app.route("/data/<id>", methods=["GET"])
+def get_data_by_id(id):
+    try:
+        # Fetch data from MongoDB based on ID
+        data = db.get_user_by_id(id)
+        del(data["_id"])
+        if data.get("events"):
+            del(data["events"])
+        if data:
+            return jsonify(data), 200  # Return data with status code 200 (OK)
+        else:
+            return jsonify({"message": "No data found for this ID"}), 404  # Return error message with status code 404 (Not Found)
 
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=3000, debug=True)
