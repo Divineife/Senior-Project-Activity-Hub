@@ -18,7 +18,7 @@ export default function RSVP({
   const [isRSVPd, setIsRSVPd] = useState(
     eventInfo?.rsvpUsers
       ? eventInfo.rsvpUsers.includes(userInfo["user_id"])
-      : false,
+      : false
   );
 
   const handleInterestClick = (event) => {
@@ -52,14 +52,25 @@ export default function RSVP({
 
   return (
     <div>
-      <Button
-        aria-describedby={id}
-        type="button"
-        onMouseLeave={handlePopoverClose}
-        onClick={handleInterestClick}
-      >
-        RSVP
-      </Button>
+      {isRSVPd ? (
+        <Button
+          aria-describedby={id}
+          type="button"
+          onMouseLeave={handlePopoverClose}
+          onClick={handleInterestClick}
+        >
+          UNRSVP
+        </Button>
+      ) : (
+        <Button
+          aria-describedby={id}
+          type="button"
+          onMouseLeave={handlePopoverClose}
+          onClick={handleInterestClick}
+        >
+          RSVP
+        </Button>
+      )}
       <BasePopup id={id} open={open} anchor={anchor}>
         <Alert severity="success">{message}</Alert>
       </BasePopup>
@@ -106,7 +117,7 @@ const PopupBody = styled("div")(
   font-weight: 500;
   font-size: 0.875rem;
   z-index: 1;
-`,
+`
 );
 
 const Button = styled("button")(
@@ -150,5 +161,5 @@ const Button = styled("button")(
       background-color: ${blue[500]};
     }
   }
-`,
+`
 );

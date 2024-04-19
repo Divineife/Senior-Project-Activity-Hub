@@ -58,7 +58,7 @@ def get_event_by_id(event_id):
     return event
 
 
-# Define a function to create event documents in the database
+# function to create event documents in the database
 def create_event(data, id):
     result = event_instance.insert_one(data)
 
