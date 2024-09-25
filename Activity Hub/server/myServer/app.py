@@ -1,15 +1,19 @@
 import os
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS, cross_origin
-from . import db
-from . import img
-from . import event_utils
-from . import mapBox
+from db import Database
+from img import ImageManager
+from event_utils import EventUtils
+from mapBox import Geocoder
 from bson import ObjectId
 from flask_session import Session
 from flask_login import LoginManager
 
 app = Flask(__name__)
+db = Database()
+img = ImageManager()
+event_utils = EventUtils()
+map_box = Geocoder()
 
 secret_key = os.environ.get("SECRET_KEY")
 app.secret_key = secret_key
@@ -67,7 +71,7 @@ def add_event():
     data["author"] = id
     data["rsvpUsers"] = []
     eventLocation = request.form.get("eventLocation")
-    geolocation = mapBox.geocode(eventLocation)
+    geolocation = map_box.geocode(eventLocation)
     data["geometry"] = geolocation["features"][0]["geometry"]["coordinates"]
 
     file = request.files["eventImage"]
@@ -94,7 +98,7 @@ def edit_event(event_id):
     data["eventImgId"] = request.form.get("curEventImage")
 
     eventLocation = request.form.get("eventLocation")
-    geolocation = mapBox.geocode(eventLocation)
+    geolocation = map_box.geocode(eventLocation)
     data["geometry"] = geolocation["features"][0]["geometry"]["coordinates"]
 
     if "newEventImg" in request.files:
@@ -175,7 +179,9 @@ def signup():
     if user_id:
         session["user_id"] = user_id
         return (
-            jsonify(message="User registered successfully",user_id=user_id, user=user_name),
+            jsonify(
+                message="User registered successfully", user_id=user_id, user=user_name
+            ),
             201,
         )
     else:
@@ -266,23 +272,28 @@ def update_rsvp(event_id):
 
 def validate_owner(user_id):
     res = db.get_user_by_id(user_id)
-    return res["_id"] == user_id\
+    return res["_id"] == user_id
+
 
 @app.route("/data/<id>", methods=["GET"])
 def get_data_by_id(id):
     try:
         # Fetch data from MongoDB based on ID
         data = db.get_user_by_id(id)
-        del(data["_id"])
+        del data["_id"]
         if data.get("events"):
-            del(data["events"])
+            del data["events"]
         if data:
             return jsonify(data), 200  # Return data with status code 200 (OK)
         else:
-            return jsonify({"message": "No data found for this ID"}), 404  # Return error message with status code 404 (Not Found)
+            return (
+                jsonify({"message": "No data found for this ID"}),
+                404,
+            )  # Return error message with status code 404 (Not Found)
 
     except Exception as e:
         return jsonify({"message": str(e)}), 500
-    
+
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=3000, debug=True)
