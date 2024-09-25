@@ -11,19 +11,17 @@ function Events() {
   const { userInSession } = useContext(NavBarContext);
   const [userId, setUserId] = useState(null);
   const [signInAlert, setSignInAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user session info and events (separate requests preferred)
-        const userSessionResponse = await fetch(
-          "http://localhost:3000/user_sess",
-          {
-            credentials: "include", // Include session cookies
-          },
-        );
+        const userSessionResponse = await fetch("http://localhost:3000/user_sess", {
+          credentials: "include",
+        });
         const eventsResponse = await fetch("http://localhost:3000/events", {
-          credentials: "include", // Include session cookies (if event data depends on user)
+          credentials: "include",
         });
 
         if (!userSessionResponse.ok || !eventsResponse.ok) {
@@ -42,6 +40,12 @@ function Events() {
     };
     fetchData();
   }, [userInSession]);
+
+  const totalPages = Math.ceil(events.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentEvents = events.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <>
       {signInAlert && (
@@ -60,10 +64,9 @@ function Events() {
         rowSpacing={4}
         sx={{ backgroundColor: "#edf3f9", width: "100%", height: "100%" }}
       >
-        {events.map((event, index) => (
-          <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }}>
+        {currentEvents.map((event) => (
+          <Grid xs={12} sm={6} md={4} lg={3} sx={{ marginBottom: 2 }} key={event.id}>
             <Event
-              key={index}
               event={{
                 ...event,
                 eventDescription:
@@ -77,6 +80,24 @@ function Events() {
           </Grid>
         ))}
       </Grid>
+
+      <div style={{ textAlign: "center", margin: "20px 0" }}>
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span style={{ margin: "0 10px" }}>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </>
   );
 }
